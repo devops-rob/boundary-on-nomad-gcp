@@ -48,9 +48,9 @@ variable "nomad_server_instance_count" {
   default = 3
 }
 
-variable "nomad_server_instance_image" {
-  type = string
-}
+//variable "nomad_server_instance_image" {
+//  type = string
+//}
 
 variable "nomad_server_instance_tag" {
   type    = string
@@ -67,9 +67,9 @@ variable "nomad_client_instance_count" {
   default = 3
 }
 
-variable "nomad_client_instance_image" {
-  type = string
-}
+//variable "nomad_client_instance_image" {
+//  type = string
+//}
 
 variable "nomad_client_instance_tag" {
   type    = string
@@ -101,6 +101,6 @@ variable "database_names" {
   default = []
 }
 
-variable "consul_master_token" {
-  type = string
-}
+//variable "consul_master_token" {
+//  type = string
+//}
