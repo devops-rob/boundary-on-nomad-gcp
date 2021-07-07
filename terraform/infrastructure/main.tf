@@ -19,4 +19,9 @@ terraform {
 //  token   = var.consul_master_token
 //}
 
+provider "google" {
+  project = var.project_id
+  region  = var.project_region
+}
+
 data "google_project" "project" {}
