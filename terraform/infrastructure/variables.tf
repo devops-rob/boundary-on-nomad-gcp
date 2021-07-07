@@ -29,7 +29,10 @@ variable "consul_server_instance_count" {
 
 variable "consul_server_instance_image" {
   type = string
+<<<<<<< HEAD
   default = "nomad-20210707085852"
+=======
+>>>>>>> 614121036986da1378ab8e9d7cde0c3deef34237
 }
 
 variable "consul_server_instance_tag" {
