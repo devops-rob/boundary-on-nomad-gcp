@@ -1,65 +1,137 @@
-# ---------------------------------------------------
-# Create VPC, subnets, and networking configurations
-# ---------------------------------------------------
-
-resource "google_compute_network" "vpc_network" {
-  name                    = "boundary"
-  auto_create_subnetworks = false
-}
-
-resource "google_compute_subnetwork" "pub-subnet-1" {
-  name          = "pub-subnet-1"
-  ip_cidr_range = "10.1.1.0/24"
-  region        = var.region
-  network       = google_compute_network.vpc_network.id
-}
-
-resource "google_compute_subnetwork" "pub-subnet-2" {
-  name          = "pub-subnet-2"
-  ip_cidr_range = "10.1.2.0/24"
-  region        = var.region
-  network       = google_compute_network.vpc_network.id
-}
-
-resource "google_compute_subnetwork" "pub-subnet-3" {
-  name          = "pub-subnet-3"
-  ip_cidr_range = "10.1.3.0/24"
-  region        = var.region
-  network       = google_compute_network.vpc_network.id
-}
-
-resource "google_compute_subnetwork" "priv-subnet-1" {
-  name          = "priv-subnet-1"
-  ip_cidr_range = "10.1.4.0/24"
-  region        = var.region
-  network       = google_compute_network.vpc_network.id
-}
-
-resource "google_compute_subnetwork" "priv-subnet-2" {
-  name          = "priv-subnet-2"
-  ip_cidr_range = "10.1.5.0/24"
-  region        = var.region
-  network       = google_compute_network.vpc_network.id
-}
-
-resource "google_compute_subnetwork" "priv-subnet-3" {
-  name          = "priv-subnet-3"
-  ip_cidr_range = "10.1.6.0/24"
-  region        = var.region
-  network       = google_compute_network.vpc_network.id
-}
-
-resource "google_compute_global_address" "db-ip-address-range" {
-  name          = "db-ip-address-range"
-  purpose       = "VPC_PEERING"
-  address_type  = "INTERNAL"
-  prefix_length = 16
-  network       = google_compute_network.vpc_network.id
-}
-
-
-resource "google_service_networking_connection" "private_vpc_connection" {
-  network                 = google_compute_network.vpc_network.id
-  service                 = "servicenetworking.googleapis.com"
-  reserved_peering_ranges = [google_compute_global_address.db-ip-address-range.name]
-}
+//# Consul
+//resource "google_compute_http_health_check" "consul" {
+//  name                = "consul-http"
+//  port                = 8500
+//  request_path        = "/v1/status/leader"
+//  check_interval_sec  = 10
+//  timeout_sec         = 10
+//  healthy_threshold   = 1
+//  unhealthy_threshold = 3
+//}
+//
+//resource "google_compute_health_check" "consul" {
+//  name                = "consul-tcp"
+//  check_interval_sec  = 10
+//  timeout_sec         = 10
+//  healthy_threshold   = 1
+//  unhealthy_threshold = 3
+//
+//  tcp_health_check {
+//    port = "8500"
+//  }
+//}
+//
+//# Nomad
+//resource "google_compute_http_health_check" "nomad" {
+//  name                = "nomad-http"
+//  port                = 4646
+//  request_path        = "/v1/status/leader"
+//  check_interval_sec  = 10
+//  timeout_sec         = 10
+//  healthy_threshold   = 1
+//  unhealthy_threshold = 3
+//}
+//
+//resource "google_compute_health_check" "nomad" {
+//  name                = "nomad-tcp"
+//  check_interval_sec  = 10
+//  timeout_sec         = 10
+//  healthy_threshold   = 1
+//  unhealthy_threshold = 3
+//
+//  tcp_health_check {
+//    port = "4646"
+//  }
+//}
+//
+//resource "google_compute_forwarding_rule" "nomad_server_internal" {
+//  name                  = "nomad-server-internal-forwarding-rule"
+//  load_balancing_scheme = "INTERNAL"
+//  backend_service       = google_compute_region_backend_service.nomad_server.id
+//
+//  all_ports = true
+//}
+//
+//resource "google_compute_region_backend_service" "nomad_server" {
+//  name          = "nomad-server"
+//  region        = var.project_region
+//  health_checks = [google_compute_health_check.nomad.id]
+//
+//  backend {
+//    group = google_compute_region_instance_group_manager.nomad_server.instance_group
+//  }
+//}
+//
+//resource "google_compute_forwarding_rule" "consul_server_internal" {
+//  name                  = "consul-server-internal-forwarding-rule"
+//  load_balancing_scheme = "INTERNAL"
+//  backend_service       = google_compute_region_backend_service.consul_server.id
+//
+//  all_ports = true
+//}
+//
+//resource "google_compute_region_backend_service" "consul_server" {
+//  name          = "consul-server"
+//  region        = var.project_region
+//  health_checks = [google_compute_health_check.consul.id]
+//
+//  backend {
+//    group = google_compute_region_instance_group_manager.consul_server.instance_group
+//  }
+//}
+//
+//#
+//# Load balancer.
+//#
+//resource "google_compute_http_health_check" "ingress_http" {
+//  name                = "ingress-http"
+//  port                = 80
+//  request_path        = "/v1/user"
+//  check_interval_sec  = 10
+//  timeout_sec         = 10
+//  healthy_threshold   = 1
+//  unhealthy_threshold = 3
+//}
+//
+//resource "google_compute_global_address" "ingress" {
+//  name = "ingress"
+//}
+//
+//resource "google_compute_global_forwarding_rule" "ingress" {
+//  name       = "ingress"
+//  target     = google_compute_target_https_proxy.ingress.id
+//  port_range = "443"
+//  ip_address = google_compute_global_address.ingress.address
+//}
+//
+//resource "google_compute_managed_ssl_certificate" "ingress" {
+//  name = "ingress"
+//
+//  managed {
+//    domains = [google_dns_record_set.api_stickhorse.name, google_dns_record_set.slack_stickhorse.name, google_dns_record_set.nomad_stickhorse.name, google_dns_record_set.consul_stickhorse.name]
+//  }
+//}
+//
+//resource "google_compute_target_https_proxy" "ingress" {
+//  name             = "ingress"
+//  url_map          = google_compute_url_map.ingress.id
+//  ssl_certificates = [google_compute_managed_ssl_certificate.ingress.id]
+//}
+//
+//resource "google_compute_url_map" "ingress" {
+//  name            = "ingress"
+//  default_service = google_compute_backend_service.ingress.id
+//}
+//
+//resource "google_compute_backend_service" "ingress" {
+//  name        = "ingress"
+//  port_name   = "http"
+//  protocol    = "HTTP"
+//  timeout_sec = 10
+//
+//  backend {
+//    group = google_compute_region_instance_group_manager.nomad_client.instance_group
+//  }
+//
+//  health_checks = [google_compute_http_health_check.ingress_http.id]
+//}
