@@ -27,5 +27,5 @@ variable "account_file" {
 
 variable "hashicorp_tool" {
   type    = string
-  default = "nomad"
+  default = "hashistack"
 }

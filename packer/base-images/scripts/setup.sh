@@ -27,30 +27,18 @@ sudo add-apt-repository \
    $(lsb_release -cs) \
    stable"
 sudo apt-get update && sudo apt-get install -y docker-ce
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get update
 if [ "${NOMAD_ENABLED}" == "true" ]; then
-  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-  sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-  sudo apt-get update && sudo apt-get install nomad
-#  curl -fsSL -o /tmp/nomad.zip https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip
-#  unzip -o -d /usr/local/bin/ /tmp/nomad.zip
+  sudo apt-get install nomad
   mkdir -p /etc/nomad.d/
-#  cp /tmp/files/nomad.service /etc/systemd/system/nomad.service
-#  systemctl daemon-reload
-#  systemctl enable nomad.service
 fi
-#if [ "${CONSUL_ENABLED}" == "true" ]; then
-#  curl -fsSL -o /tmp/consul.zip https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip
-#  unzip -o -d /usr/local/bin/ /tmp/consul.zip
-#  mkdir -p /etc/consul.d/
-#  cp /tmp/files/consul.service /etc/systemd/system/consul.service
-#  systemctl daemon-reload
-#  systemctl enable consul.service
-#fi
-#if [ "${VAULT_ENABLED}" == "true" ]; then
-#  curl -fsSL -o /tmp/vault.zip https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip
-#  unzip -o -d /usr/local/bin/ /tmp/vault.zip
-#  mkdir -p /etc/vault.d/
-#  cp /tmp/files/vault.service /etc/systemd/system/vault.service
-#  systemctl daemon-reload
-#  systemctl enable vault.service
-#fi
+if [ "${CONSUL_ENABLED}" == "true" ]; then
+  sudo apt-get install consul
+  mkdir -p /etc/consul.d/
+fi
+if [ "${VAULT_ENABLED}" == "true" ]; then
+  sudo apt-get install vault
+  mkdir -p /etc/vault.d/
+fi

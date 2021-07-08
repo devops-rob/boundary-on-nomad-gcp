@@ -108,7 +108,7 @@ resource "google_compute_managed_ssl_certificate" "ingress" {
   name = "ingress"
 
   managed {
-    domains = [google_dns_record_set.api_stickhorse.name, google_dns_record_set.slack_stickhorse.name, google_dns_record_set.nomad_stickhorse.name, google_dns_record_set.consul_stickhorse.name]
+    domains = [google_dns_record_set.nomad_bongo.name, google_dns_record_set.consul_bongo.name]
   }
 }
 

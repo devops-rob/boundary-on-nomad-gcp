@@ -11,7 +11,8 @@ build {
 
     environment_vars = [
       "NOMAD_ENABLED=true",
-      "CONSUL_ENABLED=true"
+      "CONSUL_ENABLED=true",
+      "VAULT_ENABLED=true"
     ]
   }
 }
