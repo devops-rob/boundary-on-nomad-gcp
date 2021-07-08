@@ -99,6 +99,9 @@ resource "consul_acl_policy" "nomad_client" {
         policy = "write"
       }
     RULE
+
+  depends_on = [
+  ]
 }
 
 resource "consul_acl_token" "nomad_client" {
