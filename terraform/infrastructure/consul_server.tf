@@ -28,6 +28,7 @@ resource "google_compute_region_instance_group_manager" "consul_server" {
     minimal_action               = "REPLACE"
     min_ready_sec                = 30
     replacement_method           = "SUBSTITUTE"
+    max_surge_fixed              = 3
   }
 }
 
