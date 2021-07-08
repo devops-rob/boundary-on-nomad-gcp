@@ -1,7 +1,7 @@
 #!/bin/bash
 # Configure Consul.
 mkdir -p /etc/consul.d
-cat <<EOF > /etc/consul.d/server.hcl
+cat <<EOF > /etc/consul.d/consul.hcl
 log_level = "DEBUG"
 data_dir = "/etc/consul.d/data"
 

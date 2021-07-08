@@ -16,7 +16,7 @@ tar -C /opt/cni/bin -xzf /tmp/cni.tgz
 
 # Configure Nomad.
 mkdir -p /etc/nomad.d
-cat <<EOF > /etc/nomad.d/server.hcl
+cat <<EOF > /etc/nomad.d/nomad.hcl
 log_level = "DEBUG"
 data_dir = "/etc/nomad.d/data"
 
