@@ -28,6 +28,8 @@ resource "google_compute_region_instance_group_manager" "nomad_server" {
     minimal_action               = "REPLACE"
     min_ready_sec                = 30
     replacement_method           = "SUBSTITUTE"
+    max_unavailable_fixed        = 1
+
   }
 }
 
