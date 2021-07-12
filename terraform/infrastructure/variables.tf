@@ -97,7 +97,7 @@ variable "database_instance_version" {
 
 variable "database_names" {
   type    = list(string)
-  default = []
+  default = ["boundary"]
 }
 
 variable "consul_master_token" {
