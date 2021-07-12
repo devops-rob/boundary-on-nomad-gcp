@@ -7,6 +7,18 @@ resource "google_compute_http_health_check" "consul" {
   timeout_sec         = 10
   healthy_threshold   = 1
   unhealthy_threshold = 3
+
+  depends_on = [
+    google_compute_instance_template.consul_server,
+    google_compute_region_backend_service.consul_server,
+    google_compute_firewall.consul_allow_whitelist,
+    google_compute_forwarding_rule.consul_server_internal,
+    google_compute_region_instance_group_manager.consul_server,
+    google_compute_target_pool.consul_server,
+    google_dns_record_set.consul_bongo,
+    google_dns_record_set.consul_server
+  ]
+
 }
 
 resource "google_compute_health_check" "consul" {
@@ -19,6 +31,18 @@ resource "google_compute_health_check" "consul" {
   tcp_health_check {
     port = "8500"
   }
+
+  depends_on = [
+    google_compute_instance_template.consul_server,
+    google_compute_region_backend_service.consul_server,
+    google_compute_firewall.consul_allow_whitelist,
+    google_compute_forwarding_rule.consul_server_internal,
+    google_compute_region_instance_group_manager.consul_server,
+    google_compute_target_pool.consul_server,
+    google_dns_record_set.consul_bongo,
+    google_dns_record_set.consul_server
+  ]
+
 }
 
 # Nomad

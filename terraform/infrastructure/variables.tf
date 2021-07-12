@@ -82,7 +82,7 @@ variable "whitelist" {
 
 variable "database_instance_prefix" {
   type    = string
-  default = "devrel"
+  default = "bong"
 }
 
 variable "database_instance_type" {
