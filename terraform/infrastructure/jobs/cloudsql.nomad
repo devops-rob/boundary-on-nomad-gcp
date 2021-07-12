@@ -47,7 +47,8 @@ job "cloudsql" {
         args = [
           "/cloud_sql_proxy", 
           "-instances=${var.cloudsql_host}=tcp:0.0.0.0:5432",
-          "-credential_file=local/config"
+          "-credential_file=/config",
+          "-t"
         ]
         volumes = ["local/config:/config"]
       }

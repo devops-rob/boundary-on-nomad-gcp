@@ -17,9 +17,10 @@ timeout 180 /bin/bash -c \
     nano \
     unzip \
     software-properties-common
-curl -fsSL "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/download/v2.0.0/docker-credential-gcr_linux_amd64-2.0.0.tar.gz" \
-| tar xz --to-stdout ./docker-credential-gcr \
-> /usr/bin/docker-credential-gcr && chmod +x /usr/bin/docker-credential-gcr
+sudo curl -fsSL "https://github.com/GoogleCloudPlatform/docker-credential-gcr/releases/download/v2.0.0/docker-credential-gcr_linux_amd64-2.0.0.tar.gz" \
+| sudo tar xz --to-stdout ./docker-credential-gcr \
+> docker-credential-gcr && sudo mv docker-credential-gcr /usr/bin && sudo chmod +x /usr/bin/docker-credential-gcr
+
 # Install Docker
 curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | sudo apt-key add -
 sudo add-apt-repository \
