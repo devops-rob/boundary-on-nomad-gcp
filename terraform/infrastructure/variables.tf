@@ -7,9 +7,9 @@ variable "project_region" {
   default = "europe-west1"
 }
 
-variable "credentials" {
-  type = string
-}
+//variable "credentials" {
+//  type = string
+//}
 
 variable "instance_zones" {
   type    = list(string)

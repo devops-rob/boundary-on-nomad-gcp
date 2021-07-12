@@ -10,6 +10,8 @@ resource "google_sql_database_instance" "database" {
   settings {
     tier = var.database_instance_type
   }
+
+  deletion_protection = false
 }
 
 resource "google_sql_database" "database" {
@@ -50,7 +52,7 @@ resource "nomad_job" "cloudsql" {
     vars = {
       "cloudsql_path"        = "/alloc/data/cloudsql",
       "cloudsql_host"        = "${var.project_id}:${var.project_region}:${google_sql_database_instance.database.name}",
-      "cloudsql_credentials" = base64decode(google_service_account_key.cloudsql_proxy.private_key),
+      "cloudsql_credentials" = base64decode(google_service_account_key.cloudsql_proxy.private_key)
     }
   }
 

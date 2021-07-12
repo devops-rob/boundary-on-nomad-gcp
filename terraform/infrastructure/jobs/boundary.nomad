@@ -2,10 +2,10 @@ job "boundary" {
   datacenters = ["dc1"]
   
   group "controller" {
-    constraint {
-      attribute = "${node.unique.name}"
-      value = "nomad-client-2p1f"
-    }
+//    constraint {
+//      attribute = "${node.unique.name}"
+//      value = "nomad-client-2p1f"
+//    }
 
     network {
       mode = "bridge"

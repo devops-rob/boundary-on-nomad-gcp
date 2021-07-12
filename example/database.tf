@@ -7,6 +7,7 @@ resource "google_sql_database_instance" "database" {
   database_version = var.database_instance_version
   region           = var.project_region
 
+
   settings {
     tier = var.database_instance_type
   }
