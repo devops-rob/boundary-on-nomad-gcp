@@ -61,7 +61,7 @@ variable "nomad_client_instance_type" {
   default = "e2-medium"
 }
 
-variable "nomad_client_instance_count" {
+variable "boundary_controller_instance_count" {
   type    = number
   default = 3
 }

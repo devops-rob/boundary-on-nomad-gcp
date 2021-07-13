@@ -1,16 +1,16 @@
-resource "google_compute_region_instance_group_manager" "nomad_client" {
-  name = "nomad-client-group-manager"
+resource "google_compute_region_instance_group_manager" "boundary_controller" {
+  name = "boundary-controller-group-manager"
 
-  base_instance_name        = "nomad-client"
+  base_instance_name        = "boundary-controller"
   region                    = var.project_region
   distribution_policy_zones = var.instance_zones
 
   version {
-    instance_template = google_compute_instance_template.nomad_client.id
+    instance_template = google_compute_instance_template.boundary_controller.id
   }
 
-  target_pools = [google_compute_target_pool.nomad_client.id]
-  target_size  = var.nomad_client_instance_count
+  target_pools = [google_compute_target_pool.boundary_controller.id]
+  target_size  = var.boundary_controller_instance_count
 
   named_port {
     name = "nomad"
@@ -42,8 +42,8 @@ resource "google_compute_region_instance_group_manager" "nomad_client" {
   }
 }
 
-resource "google_compute_instance_template" "nomad_client" {
-  name_prefix  = "nomad-client-"
+resource "google_compute_instance_template" "boundary_controller" {
+  name_prefix  = "boundary-controller-"
   machine_type = var.nomad_client_instance_type
 
   tags = [var.nomad_client_instance_tag, "allow-health-check", "allow-http"]
@@ -58,7 +58,7 @@ resource "google_compute_instance_template" "nomad_client" {
   metadata_startup_script = templatefile("${path.module}/cloud-init/nomad_client.sh", {
     NOMAD_SERVER_TAG  = var.nomad_server_instance_tag
     CONSUL_SERVER_TAG = var.consul_server_instance_tag
-    CONSUL_TOKEN      = data.consul_acl_token_secret_id.nomad_client.secret_id
+    CONSUL_TOKEN      = data.consul_acl_token_secret_id.boundary_controller.secret_id
   })
 
   can_ip_forward = false
@@ -77,16 +77,16 @@ resource "google_compute_instance_template" "nomad_client" {
   }
 }
 
-resource "google_compute_target_pool" "nomad_client" {
-  name = "nomad-client-pool"
+resource "google_compute_target_pool" "boundary_controller" {
+  name = "boundary-controller-pool"
 
   health_checks = [
     google_compute_http_health_check.nomad.name,
   ]
 }
 
-resource "consul_acl_policy" "nomad_client" {
-  name  = "nomad-client"
+resource "consul_acl_policy" "boundary_controller" {
+  name  = "boundary-controller"
   rules = <<-RULE
       agent_prefix "" {
         policy = "read"
@@ -115,8 +115,8 @@ resource "consul_acl_policy" "nomad_client" {
 
 }
 
-resource "consul_acl_token" "nomad_client" {
-  policies = [consul_acl_policy.nomad_client.name]
+resource "consul_acl_token" "boundary_controller" {
+  policies = [consul_acl_policy.boundary_controller.name]
   local    = true
 
   depends_on = [
@@ -133,6 +133,6 @@ resource "consul_acl_token" "nomad_client" {
 
 }
 
-data "consul_acl_token_secret_id" "nomad_client" {
-  accessor_id = consul_acl_token.nomad_client.id
+data "consul_acl_token_secret_id" "boundary_controller" {
+  accessor_id = consul_acl_token.boundary_controller.id
 }
