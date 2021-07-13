@@ -119,7 +119,7 @@ resource "null_resource" "consul_race_condition" {
 
   provisioner "local-exec" {
 
-    command = "wait 180"
+    command = "sleep 180"
 
   }
 
