@@ -31,6 +31,12 @@ client {
   }
 }
 
+plugin "docker" {
+  config {
+    allow_privileged = true
+  }
+}
+
 autopilot {
     cleanup_dead_servers      = true
     last_contact_threshold    = "200ms"
