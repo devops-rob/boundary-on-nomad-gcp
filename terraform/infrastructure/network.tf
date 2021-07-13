@@ -142,7 +142,7 @@ resource "google_compute_backend_service" "ingress" {
   timeout_sec = 10
 
   backend {
-    group = google_compute_region_instance_group_manager.nomad_client.instance_group
+    group = google_compute_region_instance_group_manager.boundary_controller.instance_group
   }
 
   health_checks = [google_compute_http_health_check.ingress_http.id]
