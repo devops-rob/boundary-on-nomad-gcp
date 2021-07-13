@@ -57,6 +57,35 @@ resource "nomad_job" "cloudsql" {
   }
 
   jobspec = file("${path.module}/jobs/cloudsql.nomad")
+
+  depends_on = [
+    null_resource.nomad_race_condition
+  ]
+}
+
+resource "null_resource" "nomad_race_condition" {
+
+  provisioner "local-exec" {
+
+    command = "sleep 180"
+
+  }
+
+  depends_on = [
+    consul_acl_policy.nomad_server,
+    consul_acl_token.nomad_server,
+    google_compute_firewall.nomad_allow_whitelist,
+    google_compute_forwarding_rule.nomad_server_internal,
+    google_compute_health_check.nomad,
+    google_compute_http_health_check.nomad,
+    google_compute_instance_template.boundary_controller,
+    google_compute_instance_template.nomad_server,
+    google_compute_region_backend_service.nomad_server,
+    google_compute_region_instance_group_manager.boundary_controller,
+    google_compute_region_instance_group_manager.nomad_server,
+    google_compute_target_pool.nomad_server,
+    google_compute_target_pool.boundary_controller
+  ]
 }
 
 output "database_user" {
