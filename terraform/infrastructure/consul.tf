@@ -116,23 +116,22 @@ resource "consul_acl_binding_rule" "node_binding" {
 }
 
 resource "null_resource" "consul_race_condition" {
+
   provisioner "local-exec" {
 
-    inline = [
-      "sleep 180"
-    ]
-
-    depends_on = [
-      google_compute_instance_template.consul_server,
-      google_compute_region_backend_service.consul_server,
-      google_compute_health_check.consul,
-      google_compute_firewall.consul_allow_whitelist,
-      google_compute_forwarding_rule.consul_server_internal,
-      google_compute_region_instance_group_manager.consul_server,
-      google_compute_target_pool.consul_server,
-      google_dns_record_set.consul_bongo,
-      google_dns_record_set.consul_server
-    ]
+    command = "wait 180"
 
   }
+
+  depends_on = [
+    google_compute_instance_template.consul_server,
+    google_compute_region_backend_service.consul_server,
+    google_compute_health_check.consul,
+    google_compute_firewall.consul_allow_whitelist,
+    google_compute_forwarding_rule.consul_server_internal,
+    google_compute_region_instance_group_manager.consul_server,
+    google_compute_target_pool.consul_server,
+    google_dns_record_set.consul_bongo,
+    google_dns_record_set.consul_server
+  ]
 }
