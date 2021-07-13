@@ -1,3 +1,4 @@
+//noinspection MissingProperty
 resource "consul_acl_auth_method" "jwt" {
   name = "jwt"
   type = "jwt"
@@ -21,7 +22,8 @@ resource "consul_acl_auth_method" "jwt" {
     google_compute_region_instance_group_manager.consul_server,
     google_compute_target_pool.consul_server,
     google_dns_record_set.consul_bongo,
-    google_dns_record_set.consul_server
+    google_dns_record_set.consul_server,
+    null_resource.consul_race_condition
   ]
 }
 
@@ -66,7 +68,8 @@ resource "consul_acl_policy" "node" {
     google_compute_region_instance_group_manager.consul_server,
     google_compute_target_pool.consul_server,
     google_dns_record_set.consul_bongo,
-    google_dns_record_set.consul_server
+    google_dns_record_set.consul_server,
+    null_resource.consul_race_condition
   ]
 
 }
@@ -86,7 +89,8 @@ resource "consul_acl_role" "node" {
     google_compute_region_instance_group_manager.consul_server,
     google_compute_target_pool.consul_server,
     google_dns_record_set.consul_bongo,
-    google_dns_record_set.consul_server
+    google_dns_record_set.consul_server,
+    null_resource.consul_race_condition
   ]
 
 }
@@ -105,7 +109,30 @@ resource "consul_acl_binding_rule" "node_binding" {
     google_compute_region_instance_group_manager.consul_server,
     google_compute_target_pool.consul_server,
     google_dns_record_set.consul_bongo,
-    google_dns_record_set.consul_server
+    google_dns_record_set.consul_server,
+    null_resource.consul_race_condition
   ]
 
+}
+
+resource "null_resource" "consul_race_condition" {
+  provisioner "local-exec" {
+
+    inline = [
+      "sleep 180"
+    ]
+
+    depends_on = [
+      google_compute_instance_template.consul_server,
+      google_compute_region_backend_service.consul_server,
+      google_compute_health_check.consul,
+      google_compute_firewall.consul_allow_whitelist,
+      google_compute_forwarding_rule.consul_server_internal,
+      google_compute_region_instance_group_manager.consul_server,
+      google_compute_target_pool.consul_server,
+      google_dns_record_set.consul_bongo,
+      google_dns_record_set.consul_server
+    ]
+
+  }
 }
