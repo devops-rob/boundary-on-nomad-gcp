@@ -25,6 +25,12 @@ job "cloudsql" {
       }
     }
 
+    count = 3
+
+    spread {
+      attribute = "${node.datacenter}"
+    }
+
     service {
       name = "cloudsql"
       port = "5432"
