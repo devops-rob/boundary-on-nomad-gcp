@@ -110,7 +110,8 @@ resource "consul_acl_policy" "boundary_controller" {
     google_compute_region_instance_group_manager.consul_server,
     google_compute_target_pool.consul_server,
     google_dns_record_set.consul_bongo,
-    google_dns_record_set.consul_server
+    google_dns_record_set.consul_server,
+    null_resource.consul_race_condition
   ]
 
 }
@@ -128,7 +129,8 @@ resource "consul_acl_token" "boundary_controller" {
     google_compute_region_instance_group_manager.consul_server,
     google_compute_target_pool.consul_server,
     google_dns_record_set.consul_bongo,
-    google_dns_record_set.consul_server
+    google_dns_record_set.consul_server,
+    null_resource.consul_race_condition
   ]
 
 }
