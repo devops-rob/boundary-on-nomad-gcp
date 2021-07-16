@@ -122,12 +122,26 @@ resource "consul_config_entry" "service_intentions" {
   config_json = jsonencode({
     Sources = [
       {
-        Action     = "allow"
-        Name       = "boundary"
-        Type       = "consul"
+        Action = "allow"
+        Name   = "boundary"
+        Type   = "consul"
       },
     ]
   })
+
+  depends_on = [
+    google_compute_instance_template.consul_server,
+    google_compute_region_backend_service.consul_server,
+    google_compute_health_check.consul,
+    google_compute_firewall.consul_allow_whitelist,
+    google_compute_forwarding_rule.consul_server_internal,
+    google_compute_region_instance_group_manager.consul_server,
+    google_compute_target_pool.consul_server,
+    google_dns_record_set.consul_bongo,
+    google_dns_record_set.consul_server,
+    null_resource.consul_race_condition
+  ]
+
 }
 
 resource "null_resource" "consul_race_condition" {
