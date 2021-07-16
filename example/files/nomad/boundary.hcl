@@ -156,6 +156,7 @@ EOF
 
       template {
         destination = "local/config.hcl"
+        destination = "local/config.hcl"
         data = <<EOF
 disable_mlock = true
 

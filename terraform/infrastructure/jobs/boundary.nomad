@@ -1,11 +1,7 @@
-job "hashicorp-boundary" {
+job "boundary" {
   datacenters = ["dc1"]
   
   group "controller" {
-    constraint {
-      attribute = "${node.unique.name}"
-      value = "nomad-client-kwml"
-    }
 
     network {
       mode = "bridge"
@@ -48,8 +44,9 @@ job "hashicorp-boundary" {
       driver = "docker"
 
       config {
-        image   = "hashicorp/boundary:0.3.0"
+        image   = "hashicorp/boundary:0.4.0"
         command = "boundary"
+        privileged = true
         args = [
             "database",
             "init",
@@ -138,7 +135,7 @@ EOF
 
       config {
         privileged = true
-        image   = "hashicorp/boundary:0.3.0"
+        image   = "hashicorp/boundary:0.4.0"
         args    = [
           "server",
           "-config=local/config.hcl"
@@ -177,19 +174,19 @@ worker {
 listener "tcp" {
   address = "0.0.0.0"
   purpose = "api"
-  tls_disable = true 
+  tls_disable = true
 }
 
 listener "tcp" {
   address = "127.0.0.1"
   purpose = "cluster"
-  tls_disable   = true 
+  tls_disable   = true
 }
 
 listener "tcp" {
   address       = "0.0.0.0"
   purpose       = "proxy"
-  tls_disable   = true 
+  tls_disable   = true
 }
 
 kms "aead" {

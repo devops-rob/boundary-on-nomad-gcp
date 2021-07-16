@@ -115,6 +115,21 @@ resource "consul_acl_binding_rule" "node_binding" {
 
 }
 
+resource "consul_config_entry" "service_intentions" {
+  name = "cloudsql"
+  kind = "service-intentions"
+
+  config_json = jsonencode({
+    Sources = [
+      {
+        Action     = "allow"
+        Name       = "boundary"
+        Type       = "consul"
+      },
+    ]
+  })
+}
+
 resource "null_resource" "consul_race_condition" {
 
   provisioner "local-exec" {
