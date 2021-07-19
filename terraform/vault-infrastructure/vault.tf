@@ -11,5 +11,6 @@ output "vault_addr" {
 }
 
 output "vault_ca_cert" {
-  value = module.vault.ca_cert_pem
+  value     = module.vault.ca_cert_pem
+  sensitive = true
 }
