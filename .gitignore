@@ -37,3 +37,5 @@ override.tf.json
 # Include Packer vars files
 **/*.pkrvars.hcl
 
+ca.crt
+
