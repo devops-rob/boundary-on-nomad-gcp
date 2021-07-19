@@ -9,3 +9,7 @@ module "vault" {
 output "vault_addr" {
   value = module.vault.vault_addr
 }
+
+output "vault_ca_cert" {
+  value = module.vault.ca_cert_pem
+}
