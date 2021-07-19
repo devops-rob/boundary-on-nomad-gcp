@@ -22,22 +22,6 @@ data "google_dns_managed_zone" "bongo" {
   name = "bongo-codes"
 }
 
-//resource "google_dns_record_set" "api_bongo" {
-//  managed_zone = data.google_dns_managed_zone.bongo.name
-//  name         = "api.${data.google_dns_managed_zone.bongo.dns_name}"
-//  type         = "A"
-//  rrdatas      = [google_compute_global_address.ingress.address]
-//  ttl          = 300
-//}
-
-//resource "google_dns_record_set" "slack_bongo" {
-//  managed_zone = data.google_dns_managed_zone.bongo.name
-//  name         = "slack.${data.google_dns_managed_zone.bongo.dns_name}"
-//  type         = "A"
-//  rrdatas      = [google_compute_global_address.ingress.address]
-//  ttl          = 300
-//}
-
 resource "google_dns_record_set" "nomad_bongo" {
   managed_zone = data.google_dns_managed_zone.bongo.name
   name         = "nomad.${data.google_dns_managed_zone.bongo.dns_name}"
