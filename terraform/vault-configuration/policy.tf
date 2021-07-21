@@ -1,9 +1,33 @@
 # Test for TFC
 
-resource "vault_policy" "boundary" {
-  name = "boundary"
+resource "vault_policy" "nomad" {
+  name = "nomad"
   policy = <<EOF
-path "secret/my_app" {
+path "auth/token/create/nomad-cluster" {
+  capabilities = ["update"]
+}
+
+path "auth/token/roles/nomad-cluster" {
+  capabilities = ["read"]
+}
+
+path "auth/token/lookup-self" {
+  capabilities = ["read"]
+}
+
+path "auth/token/lookup" {
+  capabilities = ["update"]
+}
+
+path "auth/token/revoke-accessor" {
+  capabilities = ["update"]
+}
+
+path "sys/capabilities-self" {
+  capabilities = ["update"]
+}
+
+path "auth/token/renew-self" {
   capabilities = ["update"]
 }
 EOF

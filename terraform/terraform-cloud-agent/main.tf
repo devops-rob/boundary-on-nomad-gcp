@@ -28,6 +28,16 @@ resource "google_project_iam_binding" "compute-admin" {
   ]
 }
 
+data "terraform_remote_state" "vault_infrastructure" {
+  backend = "remote"
+  config = {
+    organization = var.org
+    workspaces = {
+      name = "boundary-on-nomad-gcp-vault-infra"
+    }
+  }
+}
+
 resource "google_compute_instance" "tfc-agent" {
   count        = 1
   name         = "${var.prefix}-${count.index}"
@@ -44,9 +54,31 @@ resource "google_compute_instance" "tfc-agent" {
     container-vm = "cos-stable-89-16108-403-26"
   }
 
+//  metadata_startup_script = templatefile("${path.module}/scripts/ca_cert.sh", {
+//    CA_CERT = data.terraform_remote_state.vault_infrastructure.outputs.vault_ca_cert
+//  })
+
   metadata = {
     google-logging-enabled    = "true"
-    gce-container-declaration = "spec:\n  containers:\n    - name: ${var.prefix}-${count.index}\n      image: 'docker.io/hashicorp/tfc-agent:latest'\n      env:\n        - name: TFC_AGENT_TOKEN\n          value: ${var.tfc_agent_token}\n        - name: TFC_AGENT_SINGLE\n          value: true\n      stdin: false\n      tty: false\n  restartPolicy: Always\n\n# This container declaration format is not public API and may change without notice. Please\n# use gcloud command-line tool or Google Cloud Console to run Containers on Google Compute Engine."
+    gce-container-declaration = <<EOT
+spec:
+  containers:
+    - image: docker.io/hashicorp/tfc-agent:latest
+      name: ${var.prefix}-${count.index}
+      securityContext:
+        privileged: false
+      env:
+        - name: TFC_AGENT_TOKEN
+          value: ${var.tfc_agent_token}
+        - name: TFC_AGENT_SINGLE
+          value: true
+      stdin: false
+      tty: false
+      volumeMounts: ['type=volume,src=/certs,dst=local/certs']
+      restartPolicy: Always
+      volumes: []
+
+EOT
   }
 
   network_interface {

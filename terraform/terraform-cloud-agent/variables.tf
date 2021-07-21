@@ -26,3 +26,8 @@ variable "tfc_agent_token" {
   description = "Terraform Cloud agent token. (mark as sensitive) (TFC Organization Settings >> Agents)"
   sensitive   = true
 }
+
+variable "org" {
+  type        = string
+  description = "The TFC organisation."
+}
