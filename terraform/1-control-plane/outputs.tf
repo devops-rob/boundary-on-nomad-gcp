@@ -1,4 +1,4 @@
-output "gcp_project" {
+output "project_id" {
   value = data.google_project.project.id
 }
 

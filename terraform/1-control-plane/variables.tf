@@ -1,8 +1,8 @@
-variable "gcp_project" {
+variable "project_id" {
   description = "GCP project name"
 }
 
-variable "gcp_region" {
+variable "project_region" {
   description = "GCP region, e.g. us-east1"
   default     = "europe-west1"
 }
@@ -30,4 +30,34 @@ variable "tfc_agent_token" {
 variable "org" {
   type        = string
   description = "The TFC organisation."
+}
+
+variable "instance_zones" {
+  type    = list(string)
+  default = ["europe-west1-b", "europe-west1-c", "europe-west1-d"]
+}
+
+variable "vault_server_instance_type" {
+  type    = string
+  default = "e2-medium"
+}
+
+variable "vault_server_instance_count" {
+  type    = number
+  default = 3
+}
+
+variable "vault_server_instance_image" {
+  type = string
+}
+
+variable "vault_server_instance_tag" {
+  type    = string
+  default = "vault-server"
+}
+
+variable "allow_list" {
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+  description = "List if IP addresses to allow access to Vault."
 }

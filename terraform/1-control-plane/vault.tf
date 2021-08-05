@@ -4,6 +4,9 @@ module "vault" {
   region         = var.project_region
   kms_keyring    = "hashicorp-vault"
   kms_crypto_key = "vault-init"
+  allow_ssh      = false
+
+  vault_allowed_cidrs = var.allow_list
 }
 
 output "vault_addr" {

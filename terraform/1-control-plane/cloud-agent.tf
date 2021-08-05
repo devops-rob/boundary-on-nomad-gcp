@@ -1,5 +1,5 @@
 resource "google_service_account" "tfc-agent" {
-  project      = var.gcp_project
+  project      = var.project_id
   display_name = "tfc-agent Service Account"
   account_id   = "tfc-agent"
 }
@@ -7,7 +7,7 @@ resource "google_service_account" "tfc-agent" {
 # a role for terraform consumer to impersonate
 # you'll need to customize IAM bindings to access resources as desired
 resource "google_service_account" "terraform-dev-role" {
-  project      = var.gcp_project
+  project      = var.project_id
   display_name = "terraform-dev-role Service Account"
   account_id   = "terraform-dev-role"
 }
@@ -21,7 +21,7 @@ resource "google_service_account_iam_binding" "terraform-dev-role" {
 }
 
 resource "google_project_iam_binding" "compute-admin" {
-  project = var.gcp_project
+  project = var.project_id
   role    = "roles/compute.admin"
   members = [
     "serviceAccount:${google_service_account.terraform-dev-role.email}",
@@ -36,6 +36,11 @@ data "terraform_remote_state" "vault_infrastructure" {
       name = "boundary-on-nomad-gcp-vault-infra"
     }
   }
+}
+
+locals {
+  ca_cert = join("\",\"", data.terraform_remote_state.vault_infrastructure.outputs.vault_ca_cert)
+  ca_path = "/var/certs/ca.crt"
 }
 
 resource "google_compute_instance" "tfc-agent" {
@@ -54,16 +59,15 @@ resource "google_compute_instance" "tfc-agent" {
     container-vm = "cos-stable-89-16108-403-26"
   }
 
-//  metadata_startup_script = templatefile("${path.module}/scripts/ca_cert.sh", {
-//    CA_CERT = data.terraform_remote_state.vault_infrastructure.outputs.vault_ca_cert
-//  })
-
   metadata = {
-    google-logging-enabled    = "true"
-    gce-container-declaration = <<EOT
+    gce-container-declaration =<<EOT
 spec:
   containers:
     - image: docker.io/hashicorp/tfc-agent:latest
+      volumeMounts:
+        - mountPath: ${local.ca_path}
+          name: cert
+          readOnly: true
       name: ${var.prefix}-${count.index}
       securityContext:
         privileged: false
@@ -74,12 +78,20 @@ spec:
           value: true
       stdin: false
       tty: false
-      volumeMounts: ['type=volume,src=/certs,dst=local/certs']
       restartPolicy: Always
-      volumes: []
-
+  volumes:
+    - hostPath:
+        path: ${local.ca_path}
+      name: cert
 EOT
+    google-logging-enabled    = "true"
+    google-monitoring-enabled = "true"
   }
+
+  metadata_startup_script = templatefile("${path.module}/scripts/ca_cert.sh", {
+    ca_cert = local.ca_cert
+    ca_path = local.ca_path
+  })
 
   network_interface {
     network = "default"
