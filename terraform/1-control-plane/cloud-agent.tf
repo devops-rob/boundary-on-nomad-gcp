@@ -28,18 +28,18 @@ resource "google_project_iam_binding" "compute-admin" {
   ]
 }
 
-data "terraform_remote_state" "vault_infrastructure" {
-  backend = "remote"
-  config = {
-    organization = var.org
-    workspaces = {
-      name = "boundary-on-nomad-gcp-vault-infra"
-    }
-  }
-}
+//data "terraform_remote_state" "vault_infrastructure" {
+//  backend = "remote"
+//  config = {
+//    organization = var.org
+//    workspaces = {
+//      name = "boundary-on-nomad-gcp-vault-infra"
+//    }
+//  }
+//}
 
 locals {
-  ca_cert = join("\",\"", data.terraform_remote_state.vault_infrastructure.outputs.vault_ca_cert)
+  ca_cert = join("\",\"", module.vault.ca_cert_pem[0])
   ca_path = "/var/certs/ca.crt"
 }
 
