@@ -1,8 +1,12 @@
+resource "random_id" "kms" {
+  byte_length = 8
+}
+
 module "vault" {
   source         = "terraform-google-modules/vault/google"
   project_id     = var.project_id
   region         = var.project_region
-  kms_keyring    = "hashicorp-vault"
+  kms_keyring    = "hashicorp-vault-${random_id.kms.hex}"
   kms_crypto_key = "vault-init"
   allow_ssh      = false
 
