@@ -39,7 +39,7 @@ resource "google_project_iam_binding" "compute-admin" {
 //}
 
 locals {
-  ca_cert = join("\",\"", module.vault.ca_cert_pem[0])
+//  ca_cert = join("\",\"", module.vault.ca_cert_pem[0])
   ca_path = "/var/certs/ca.crt"
 }
 
@@ -89,7 +89,7 @@ EOT
   }
 
   metadata_startup_script = templatefile("${path.module}/scripts/ca_cert.sh", {
-    ca_cert = local.ca_cert
+    ca_cert = module.vault.ca_cert_pem[0]
     ca_path = local.ca_path
   })
 
