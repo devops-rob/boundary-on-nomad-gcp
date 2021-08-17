@@ -46,24 +46,6 @@ base64 --decode < /etc/vault.d/tls/vault.key.enc | gcloud kms decrypt \
 
 cp /etc/vault.d/tls/vault-ca.crt /usr/local/share/ca-certificates/
 
-#mkdir -p /var/certs/vault
-#
-#echo "WRITING VAULT CA CERTIFICATE FILE"
-#
-#cat <<EOF > /var/certs/vault/vault-ca.crt
-#${vault_ca_cert}
-#EOF
-#
-#echo "DONE"
-#
-#cho "WRITING VAULT CA KEY FILE"
-#
-#cat <<EOF > /var/certs/vault/vault-ca.key
-#${vault_ca_key}
-#EOF
-#
-#echo "DONE"
-
 # Consul TLS certificates
 
 mkdir -p /etc/consul.d/tls

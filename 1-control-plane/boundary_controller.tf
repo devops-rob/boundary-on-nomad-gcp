@@ -7,7 +7,7 @@ module "boundary_tls_cert" {
 
   project_id            = var.project_id
   region                = var.project_region
-  service_account_email = google_compute_instance_template.boundary_controller.service_account.email
+  service_account_email = google_compute_instance_template.boundary_controller.service_account[0].email
   tls_bucket            = "boundary-tls"
   tls_cert_name         = "boundary"
 }
@@ -17,7 +17,7 @@ resource "google_storage_bucket_iam_member" "boundary_controller" {
   role = [
     "roles/storage.legacyObjectReader"
   ]
-  member = google_compute_instance_template.boundary_controller.service_account.email
+  member = google_compute_instance_template.boundary_controller.service_account[0].email
 }
 
 resource "google_compute_region_instance_group_manager" "boundary_controller" {

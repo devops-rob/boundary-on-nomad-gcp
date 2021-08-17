@@ -4,7 +4,7 @@ module "consul_tls_cert" {
 
   project_id            = var.project_id
   region                = var.project_region
-  service_account_email = google_compute_instance_template.consul_server.service_account.email
+  service_account_email = google_compute_instance_template.consul_server.service_account[0].email
   tls_bucket            = "consul-tls"
   tls_cert_name         = "consul"
 }
@@ -14,7 +14,7 @@ resource "google_storage_bucket_iam_member" "consul_server" {
   role = [
     "roles/storage.legacyObjectReader"
   ]
-  member = google_compute_instance_template.consul_server.service_account.email
+  member = google_compute_instance_template.consul_server.service_account[0].email
 }
 
 
