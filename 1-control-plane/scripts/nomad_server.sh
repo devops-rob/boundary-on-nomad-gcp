@@ -62,15 +62,6 @@ base64 --decode < /etc/consul.d/tls/consul.key.enc | gcloud kms decrypt \
 cp /etc/consul.d/tls/consul-ca.crt /usr/local/share/ca-certificates/
 update-ca-certificates
 
-#mkdir -p /var/certs/consul
-#
-#echo "WRITING Consul CERTIFICATE FILE"
-#
-#cat <<EOF > /var/certs/vault/consul-ca.crt
-#${consul_ca_cert}
-#EOF
-#
-#echo "DONE"
 
 # Nomad configuration files
 cat <<EOF > /etc/nomad.d/nomad.hcl

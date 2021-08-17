@@ -14,9 +14,7 @@ module "boundary_tls_cert" {
 
 resource "google_storage_bucket_iam_member" "boundary_controller" {
   bucket = module.vault.vault_storage_bucket
-  role = [
-    "roles/storage.legacyObjectReader"
-  ]
+  role = "roles/storage.legacyObjectReader"
   member = google_compute_instance_template.boundary_controller.service_account[0].email
 }
 
