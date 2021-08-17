@@ -18,9 +18,8 @@ module "nomad_tls_cert" {
 
 resource "google_storage_bucket_iam_member" "nomad_server" {
   bucket = module.vault.vault_storage_bucket
-  role = [
-    "roles/storage.legacyObjectReader"
-  ]
+  role = "roles/storage.legacyObjectReader"
+
   member = google_compute_instance_template.nomad_server.service_account[0].email
 }
 
