@@ -17,3 +17,15 @@ output "encrypted_private_key" {
 output "keyring" {
   value = google_kms_key_ring.key_ring.id
 }
+
+output "cert_filename" {
+  value = google_storage_bucket_object.server-cert.name
+}
+
+output "key_filename" {
+  value = google_storage_bucket_object.private-key.name
+}
+
+output "ca_filename" {
+  value = google_storage_bucket_object.ca-cert.name
+}

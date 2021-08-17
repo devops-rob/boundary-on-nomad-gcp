@@ -1,8 +1,8 @@
 #!/bin/bash
 
-mkdir -p /var/certs
+mkdir -p /var/certs/vault
 
-echo "WRITING CERTIFICATE FILE"
+echo "WRITING VAULT CERTIFICATE FILE"
 
 cat <<EOF > ${ca_path}
 ${ca_cert}

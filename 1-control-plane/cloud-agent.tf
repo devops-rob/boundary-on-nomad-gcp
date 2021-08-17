@@ -40,7 +40,7 @@ resource "google_project_iam_binding" "compute-admin" {
 
 locals {
 //  ca_cert = join("\",\"", module.vault.ca_cert_pem[0])
-  ca_path = "/var/certs/ca.crt"
+  ca_path = "/var/certs/vault/ca.crt"
 }
 
 resource "google_compute_instance" "tfc-agent" {

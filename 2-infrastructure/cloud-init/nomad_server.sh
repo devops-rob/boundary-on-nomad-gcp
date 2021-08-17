@@ -14,8 +14,15 @@ curl -L https://github.com/containernetworking/plugins/releases/download/v0.9.1/
 mkdir -p /opt/cni/bin
 tar -C /opt/cni/bin -xzf /tmp/cni.tgz
 
-# Configure Nomad.
+# Create Nomad directory.
 mkdir -p /etc/nomad.d
+
+# Download TLS files from GCS
+mkdir -p /etc/nomad.d/tls
+gsutil cp "gs://${nomad_tls_bucket}/${nomad_ca_cert_filename}" /etc/nomad.d/tls/nomad-ca.crt
+gsutil cp "gs://${nomad_tls_bucket}/${nomad_tls_cert_filename}" /etc/nomad.d/tls/nomad.crt
+gsutil cp "gs://${nomad_tls_bucket}/${nomad_tls_key_filename}" /etc/nomad.d/tls/nomad.key.enc
+
 cat <<EOF > /etc/nomad.d/nomad.hcl
 log_level = "DEBUG"
 data_dir = "/etc/nomad.d/data"
@@ -50,6 +57,10 @@ consul {
   client_auto_join = true
 
   token = "${CONSUL_TOKEN}"
+}
+
+acl {
+  enabled = true
 }
 EOF
 

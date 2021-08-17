@@ -55,7 +55,7 @@ resource "google_compute_instance_template" "consul_server" {
   network_interface {
     network = "default"
 
-    access_config {}
+//    access_config {}
   }
 
   lifecycle {

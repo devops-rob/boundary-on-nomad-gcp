@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.12.31"
+  required_version = ">= 0.13"
   required_providers {
     google = {
       version = "~> 3.69"
@@ -13,3 +13,5 @@ provider "google" {
 }
 
 data "google_project" "project" {}
+
+provider "random" {}
