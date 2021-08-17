@@ -72,7 +72,7 @@ resource "google_compute_instance_template" "nomad_server" {
     boot         = true
   }
 
-  metadata_startup_script = templatefile("${path.module}/cloud-init/nomad_server.sh", {
+  metadata_startup_script = templatefile("${path.module}/scripts/nomad_server.sh", {
     CONSUL_SERVER_TAG        = var.consul_server_instance_tag
     CONSUL_TOKEN             = random_uuid.consul_token.id
     consul_tls_bucket        = module.consul_tls_cert.bucket_id

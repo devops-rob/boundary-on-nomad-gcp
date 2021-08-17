@@ -65,7 +65,7 @@ resource "google_compute_instance_template" "consul_server" {
     boot         = true
   }
 
-  metadata_startup_script = templatefile("${path.module}/cloud-init/consul_server.sh", {
+  metadata_startup_script = templatefile("${path.module}/scripts/consul_server.sh", {
     CONSUL_SERVER_COUNT              = var.consul_server_instance_count
     CONSUL_SERVER_TAG                = var.consul_server_instance_tag
     CONSUL_MASTER_TOKEN              = var.consul_master_token

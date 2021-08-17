@@ -77,7 +77,7 @@ resource "google_compute_instance_template" "boundary_controller" {
     boot         = true
   }
 
-  metadata_startup_script = templatefile("${path.module}/cloud-init/nomad_client.sh", {
+  metadata_startup_script = templatefile("${path.module}/scripts/nomad_client.sh", {
     NOMAD_SERVER_TAG         = var.nomad_server_instance_tag
     CONSUL_SERVER_TAG        = var.consul_server_instance_tag
     CONSUL_TOKEN             = random_uuid.consul_token.id
