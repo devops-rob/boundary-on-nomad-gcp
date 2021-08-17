@@ -11,7 +11,7 @@ module "nomad_tls_cert" {
 
   project_id            = var.project_id
   region                = var.project_region
-  service_account_email = google_compute_instance_template.nomad_server.service_account.email
+  service_account_email = google_compute_instance_template.nomad_server.service_account[0].email
   tls_bucket            = "nomad-tls"
   tls_cert_name         = "nomad"
 }
@@ -21,7 +21,7 @@ resource "google_storage_bucket_iam_member" "nomad_server" {
   role = [
     "roles/storage.legacyObjectReader"
   ]
-  member = google_compute_instance_template.nomad_server.service_account.email
+  member = google_compute_instance_template.nomad_server.service_account[0].email
 }
 
 resource "google_compute_region_instance_group_manager" "nomad_server" {
