@@ -18,7 +18,7 @@ module "vault" {
 
   vault_allowed_cidrs = var.allow_list
 
-  network = data.google_compute_netwok.default.name
+  network = data.google_compute_network.default.name
 }
 
 output "vault_addr" {
@@ -39,6 +39,6 @@ data "google_kms_crypto_key" "vault" {
   key_ring = data.google_kms_key_ring.vault.self_link
 }
 
-data "google_compute_netwok" "default" {
+data "google_compute_network" "default" {
   name = "default"
 }
