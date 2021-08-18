@@ -18,8 +18,8 @@ module "vault" {
 
   vault_allowed_cidrs = var.allow_list
 
-  network = data.google_compute_network.default.self_link
-  subnet  = data.google_compute_subnetwork.default.self_link
+//  network = data.google_compute_network.default.self_link
+//  subnet  = data.google_compute_subnetwork.default.self_link
 }
 
 output "vault_addr" {
