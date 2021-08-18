@@ -16,8 +16,8 @@ module "consul_tls_cert" {
 
 resource "google_storage_bucket_iam_member" "consul_server" {
   bucket = module.vault.vault_storage_bucket
-  role = "roles/storage.legacyObjectReader"
-  member = google_service_account.consul_server.email
+  role   = "roles/storage.legacyObjectReader"
+  member = "serviceAccount:${google_service_account.consul_server.email}"
 }
 
 
@@ -94,7 +94,7 @@ resource "google_compute_instance_template" "consul_server" {
   }
 
   service_account {
-    email = google_service_account.consul_server.email
+    email  = google_service_account.consul_server.email
     scopes = ["userinfo-email", "compute-ro", "storage-ro", "cloud-platform"]
   }
 }

@@ -24,19 +24,19 @@ resource "google_storage_bucket_iam_member" "nomad_server" {
   bucket = module.vault.vault_storage_bucket
   role   = "roles/storage.legacyObjectReader"
 
-  member = google_service_account.nomad_server.email
+  member = "serviceAccount:${google_service_account.nomad_server.email}"
 }
 
 resource "google_kms_crypto_key_iam_member" "nomad_vault" {
   crypto_key_id = data.google_kms_crypto_key.vault.id
   role          = "roles/cloudkms.cryptoKeyDecrypter"
-  member        = google_service_account.nomad_server.email
+  member        = "serviceAccount:${google_service_account.nomad_server.email}"
 }
 
 resource "google_kms_crypto_key_iam_member" "nomad_consul" {
   crypto_key_id = module.consul_tls_cert.key_id
   role          = "roles/cloudkms.cryptoKeyDecrypter"
-  member        = google_service_account.nomad_server.email
+  member        = "serviceAccount:${google_service_account.nomad_server.email}"
 }
 
 

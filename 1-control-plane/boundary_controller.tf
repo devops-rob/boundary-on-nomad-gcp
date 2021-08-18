@@ -6,6 +6,8 @@ resource "google_service_account" "boundary_controller" {
   display_name = "Boundary Controller"
 }
 
+
+
 module "boundary_tls_cert" {
   source  = "devops-rob/tls/gcp"
   version = "0.1.4"
@@ -20,7 +22,7 @@ module "boundary_tls_cert" {
 resource "google_storage_bucket_iam_member" "boundary_controller" {
   bucket = module.vault.vault_storage_bucket
   role   = "roles/storage.legacyObjectReader"
-  member = google_service_account.boundary_controller.email
+  member = "serviceAccount:${google_service_account.boundary_controller.email}"
 }
 
 resource "google_compute_region_instance_group_manager" "boundary_controller" {

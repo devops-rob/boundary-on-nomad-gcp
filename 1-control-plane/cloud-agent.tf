@@ -15,49 +15,49 @@ resource "google_service_account" "terraform-dev-role" {
 resource "google_storage_bucket_iam_member" "tfc_agent_boundary_controller" {
   bucket = module.boundary_tls_cert.bucket_id
   role   = "roles/storage.legacyObjectReader"
-  member = google_service_account.terraform-dev-role.email
+  member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
 }
 
 resource "google_storage_bucket_iam_member" "tfc_agent_consul_server" {
   bucket = module.consul_tls_cert.bucket_id
   role   = "roles/storage.legacyObjectReader"
-  member = google_service_account.terraform-dev-role.email
+  member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
 }
 
 resource "google_storage_bucket_iam_member" "tfc_agent_nomad_server" {
   bucket = module.nomad_tls_cert.bucket_id
   role   = "roles/storage.legacyObjectReader"
-  member = google_service_account.terraform-dev-role.email
+  member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
 }
 
 resource "google_storage_bucket_iam_member" "tfc_agent_vault" {
   bucket = module.vault.vault_storage_bucket
   role   = "roles/storage.legacyObjectReader"
-  member = google_service_account.terraform-dev-role.email
+  member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
 }
 
 resource "google_kms_crypto_key_iam_member" "tfc_agent_nomad" {
   crypto_key_id = module.nomad_tls_cert.key_id
   role          = "roles/cloudkms.cryptoKeyDecrypter"
-  member        = google_service_account.terraform-dev-role.email
+  member        = "serviceAccount:${google_service_account.terraform-dev-role.email}"
 }
 
 resource "google_kms_crypto_key_iam_member" "tfc_agent_consul" {
   crypto_key_id = module.consul_tls_cert.key_id
   role          = "roles/cloudkms.cryptoKeyDecrypter"
-  member        = google_service_account.terraform-dev-role.email
+  member        = "serviceAccount:${google_service_account.terraform-dev-role.email}"
 }
 
 resource "google_kms_crypto_key_iam_member" "tfc_agent_boundary" {
   crypto_key_id = module.boundary_tls_cert.key_id
   role          = "roles/cloudkms.cryptoKeyDecrypter"
-  member        = google_service_account.terraform-dev-role.email
+  member        = "serviceAccount:${google_service_account.terraform-dev-role.email}"
 }
 
 resource "google_kms_crypto_key_iam_member" "tfc_agent_vault" {
   crypto_key_id = data.google_kms_crypto_key.vault.id
   role          = "roles/cloudkms.cryptoKeyDecrypter"
-  member        = google_service_account.terraform-dev-role.email
+  member        = "serviceAccount:${google_service_account.terraform-dev-role.email}"
 }
 
 resource "google_service_account_iam_binding" "terraform-dev-role" {
@@ -77,7 +77,6 @@ resource "google_project_iam_binding" "compute-admin" {
 }
 
 locals {
-  //  ca_cert = join("\",\"", module.vault.ca_cert_pem[0])
   ca_path = "/var/certs"
 }
 
