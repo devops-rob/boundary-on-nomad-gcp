@@ -27,6 +27,19 @@ resource "google_storage_bucket_iam_member" "nomad_server" {
   member = google_service_account.nomad_server.email
 }
 
+resource "google_kms_crypto_key_iam_member" "nomad_vault" {
+  crypto_key_id = data.google_kms_crypto_key.vault.id
+  role          = "roles/cloudkms.cryptoKeyDecrypter"
+  member        = google_service_account.nomad_server.email
+}
+
+resource "google_kms_crypto_key_iam_member" "nomad_consul" {
+  crypto_key_id = module.consul_tls_cert.key_id
+  role          = "roles/cloudkms.cryptoKeyDecrypter"
+  member        = google_service_account.nomad_server.email
+}
+
+
 resource "google_compute_region_instance_group_manager" "nomad_server" {
   name = "nomad-server-group-manager"
 
