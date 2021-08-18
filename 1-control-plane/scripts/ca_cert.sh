@@ -1,17 +1,6 @@
 #!/bin/bash
 
 mkdir -p /var/certs
-#
-#echo "WRITING VAULT CERTIFICATE FILE"
-#
-#cat <<EOF > ${ca_path}
-#${ca_cert}
-#EOF
-#
-#echo "DONE"
-#
-#cat ${ca_path}
-
 
 # Download Nomad TLS files from GCS
 mkdir -p /etc/nomad.d/tls
