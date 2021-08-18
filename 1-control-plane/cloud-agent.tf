@@ -28,19 +28,9 @@ resource "google_project_iam_binding" "compute-admin" {
   ]
 }
 
-//data "terraform_remote_state" "vault_infrastructure" {
-//  backend = "remote"
-//  config = {
-//    organization = var.org
-//    workspaces = {
-//      name = "boundary-on-nomad-gcp-vault-infra"
-//    }
-//  }
-//}
-
 locals {
-//  ca_cert = join("\",\"", module.vault.ca_cert_pem[0])
-  ca_path = "/var/certs/vault/ca.crt"
+  //  ca_cert = join("\",\"", module.vault.ca_cert_pem[0])
+  ca_path = "/var/certs"
 }
 
 resource "google_compute_instance" "tfc-agent" {
@@ -60,7 +50,7 @@ resource "google_compute_instance" "tfc-agent" {
   }
 
   metadata = {
-    gce-container-declaration =<<EOT
+    gce-container-declaration = <<EOT
 spec:
   containers:
     - image: docker.io/hashicorp/tfc-agent:latest
@@ -89,8 +79,26 @@ EOT
   }
 
   metadata_startup_script = templatefile("${path.module}/scripts/ca_cert.sh", {
-    ca_cert = module.vault.ca_cert_pem[0]
-    ca_path = local.ca_path
+    consul_tls_bucket        = module.consul_tls_cert.bucket_id
+    consul_ca_cert_filename  = module.consul_tls_cert.ca_filename
+    consul_tls_cert_filename = module.consul_tls_cert.cert_filename
+    consul_tls_key_filename  = module.consul_tls_cert.key_filename
+    consul_kms_crypto_key    = module.consul_tls_cert.key_id
+
+    nomad_tls_bucket        = module.nomad_tls_cert.bucket_id
+    nomad_ca_cert_filename  = module.nomad_tls_cert.ca_filename
+    nomad_tls_cert_filename = module.nomad_tls_cert.cert_filename
+    nomad_tls_key_filename  = module.nomad_tls_cert.key_filename
+    nomad_kms_crypto_key    = module.nomad_tls_cert.key_id
+
+    vault_ca_cert_filename  = var.vault_ca_cert_filename
+    vault_tls_cert_filename = var.vault_tls_cert_filename
+    vault_tls_key_filename  = var.vault_tls_key_filename
+    vault_tls_bucket        = module.vault.vault_storage_bucket
+    vault_kms_crypto_key    = var.vault_kms_crypto_key
+
+    kms_project = var.project_id
+
   })
 
   network_interface {

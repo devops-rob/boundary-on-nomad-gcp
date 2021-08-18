@@ -17,6 +17,8 @@ module "vault" {
   vault_tls_key_filename  = var.vault_tls_key_filename
 
   vault_allowed_cidrs = var.allow_list
+
+  network = ""
 }
 
 output "vault_addr" {
