@@ -1,21 +1,26 @@
 resource "random_uuid" "boundary_token" {
 }
 
+resource "google_service_account" "boundary_controller" {
+  account_id   = "boundary-controller-id"
+  display_name = "Boundary Controller"
+}
+
 module "boundary_tls_cert" {
   source  = "devops-rob/tls/gcp"
   version = "0.1.4"
 
   project_id            = var.project_id
   region                = var.project_region
-  service_account_email = google_compute_instance_template.boundary_controller.service_account[0].email
+  service_account_email = google_service_account.boundary_controller.email
   tls_bucket            = "boundary-tls"
   tls_cert_name         = "boundary"
 }
 
 resource "google_storage_bucket_iam_member" "boundary_controller" {
   bucket = module.vault.vault_storage_bucket
-  role = "roles/storage.legacyObjectReader"
-  member = google_compute_instance_template.boundary_controller.service_account[0].email
+  role   = "roles/storage.legacyObjectReader"
+  member = google_service_account.boundary_controller.email
 }
 
 resource "google_compute_region_instance_group_manager" "boundary_controller" {
@@ -111,6 +116,7 @@ resource "google_compute_instance_template" "boundary_controller" {
   }
 
   service_account {
+    email  = google_service_account.boundary_controller.email
     scopes = ["userinfo-email", "compute-ro", "storage-ro", "cloud-platform"]
   }
 }

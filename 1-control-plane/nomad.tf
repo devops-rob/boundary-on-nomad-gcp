@@ -4,6 +4,10 @@ resource "random_uuid" "consul_token" {
 resource "random_uuid" "vault_token" {
 }
 
+resource "google_service_account" "nomad_server" {
+  account_id   = "nomad-server-id"
+  display_name = "Nomad Server"
+}
 
 module "nomad_tls_cert" {
   source  = "devops-rob/tls/gcp"
@@ -11,16 +15,16 @@ module "nomad_tls_cert" {
 
   project_id            = var.project_id
   region                = var.project_region
-  service_account_email = google_compute_instance_template.nomad_server.service_account[0].email
+  service_account_email = google_service_account.nomad_server.email
   tls_bucket            = "nomad-tls"
   tls_cert_name         = "nomad"
 }
 
 resource "google_storage_bucket_iam_member" "nomad_server" {
   bucket = module.vault.vault_storage_bucket
-  role = "roles/storage.legacyObjectReader"
+  role   = "roles/storage.legacyObjectReader"
 
-  member = google_compute_instance_template.nomad_server.service_account[0].email
+  member = google_service_account.nomad_server.email
 }
 
 resource "google_compute_region_instance_group_manager" "nomad_server" {
@@ -111,6 +115,7 @@ resource "google_compute_instance_template" "nomad_server" {
   }
 
   service_account {
+    email  = google_service_account.nomad_server.email
     scopes = ["userinfo-email", "compute-ro", "storage-ro", "cloud-platform"]
   }
 }
