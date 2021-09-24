@@ -152,13 +152,13 @@ ports {
   grpc = 8502
 }
 
-verify_incoming = false,
-verify_outgoing = true,
-verify_server_hostname = true,
-ca_file = "/etc/consul.d/tls/consul-ca.crt",
-auto_encrypt = {
-  tls = true
-}
+# verify_incoming = false,
+# verify_outgoing = true,
+# verify_server_hostname = true,
+# ca_file = "/etc/consul.d/tls/consul-ca.crt",
+# auto_encrypt = {
+#   tls = true
+# }
 connect {
   enabled = true
 }
