@@ -121,6 +121,7 @@ resource "google_compute_instance_template" "nomad_server" {
   network_interface {
     network = "default"
 
+    access_config {}
   }
 
   lifecycle {
