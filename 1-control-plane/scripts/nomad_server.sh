@@ -76,17 +76,17 @@ server {
   }
 }
 
-tls {
-  http = true
-  rpc  = true
+# tls {
+#   http = true
+#   rpc  = true
 
-  ca_file   = "/etc/nomad.d/tls/nomad-ca.crt"
-  cert_file = "/etc/nomad.d/tls/nomad.crt"
-  key_file  = "/etc/nomad.d/tls/nomad.key.enc"
+#   ca_file   = "/etc/nomad.d/tls/nomad-ca.crt"
+#   cert_file = "/etc/nomad.d/tls/nomad.crt"
+#   key_file  = "/etc/nomad.d/tls/nomad.key.enc"
 
-  verify_server_hostname = true
-  verify_https_client    = true
-}
+#   verify_server_hostname = true
+#   verify_https_client    = true
+# }
 
 autopilot {
     cleanup_dead_servers      = true
@@ -112,18 +112,18 @@ consul {
   token = "${CONSUL_TOKEN}"
 }
 
-vault {
-  enabled     = true
-  ca_file     = "/etc/vault.d/tls/vault-ca.crt"
-  cert_file   = "/etc/vault.d/tls/vault.crt"
-  key_file    = "/etc/vault.d/tls/nomad.key"
+# vault {
+#   enabled     = true
+#   ca_file     = "/etc/vault.d/tls/vault-ca.crt"
+#   cert_file   = "/etc/vault.d/tls/vault.crt"
+#   key_file    = "/etc/vault.d/tls/nomad.key"
 
-  address     = "${VAULT_ADDR}"
+#   address     = "${VAULT_ADDR}"
 
-  token       = "${VAULT_TOKEN}"
+#   token       = "${VAULT_TOKEN}"
 
-  create_from_role = "nomad-cluster"
-}
+#   create_from_role = "nomad-cluster"
+# }
 
 EOF
 

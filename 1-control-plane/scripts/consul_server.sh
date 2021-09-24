@@ -38,15 +38,15 @@ ports {
   grpc = 8502
 }
 
-verify_incoming = true,
-verify_outgoing = true,
-verify_server_hostname = true,
-ca_file = "/etc/consul.d/tls/consul-ca.crt",
-cert_file = "/etc/consul.d/tls/consul.crt",
-key_file = "/etc/consul.d/tls/consul.key",
-auto_encrypt {
-  allow_tls = true
-}
+# verify_incoming = true,
+# verify_outgoing = true,
+# verify_server_hostname = true,
+# ca_file = "/etc/consul.d/tls/consul-ca.crt",
+# cert_file = "/etc/consul.d/tls/consul.crt",
+# key_file = "/etc/consul.d/tls/consul.key",
+# auto_encrypt {
+#   allow_tls = true
+# }
 
 connect {
   enabled = true

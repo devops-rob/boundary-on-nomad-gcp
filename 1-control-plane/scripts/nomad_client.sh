@@ -82,17 +82,17 @@ plugin "docker" {
   }
 }
 
-tls {
-  http = true
-  rpc  = true
+# tls {
+#   http = true
+#   rpc  = true
 
-  ca_file   = "/etc/nomad.d/tls/nomad-ca.crt"
-  cert_file = "/etc/nomad.d/tls/nomad.crt"
-  key_file  = "/etc/nomad.d/tls/nomad.key.enc"
+#   ca_file   = "/etc/nomad.d/tls/nomad-ca.crt"
+#   cert_file = "/etc/nomad.d/tls/nomad.crt"
+#   key_file  = "/etc/nomad.d/tls/nomad.key.enc"
 
-  verify_server_hostname = true
-  verify_https_client    = true
-}
+#   verify_server_hostname = true
+#   verify_https_client    = true
+# }
 
 autopilot {
     cleanup_dead_servers      = true
@@ -117,20 +117,20 @@ consul {
 
   token = "${CONSUL_TOKEN}"
 
-  ssl       = true
-  ca_file   = "/etc/consul.d/tls/consul-ca.crt"
-  cert_file = "/etc/consul.d/tls/consul.crt"
-  key_file  = "/etc/consul.d/tls/consul.key"
-}
+#   ssl       = true
+#   ca_file   = "/etc/consul.d/tls/consul-ca.crt"
+#   cert_file = "/etc/consul.d/tls/consul.crt"
+#   key_file  = "/etc/consul.d/tls/consul.key"
+# }
 
-vault {
-  enabled     = true
-  ca_file     = "/etc/vault.d/tls/vault-ca.crt"
-  cert_file   = "/etc/vault.d/tls/vault.crt"
-  key_file    = "/etc/vault.d/tls/nomad.key"
+# vault {
+#   enabled     = true
+#   ca_file     = "/etc/vault.d/tls/vault-ca.crt"
+#   cert_file   = "/etc/vault.d/tls/vault.crt"
+#   key_file    = "/etc/vault.d/tls/nomad.key"
 
-  address     = "${VAULT_ADDR}"
-}
+#   address     = "${VAULT_ADDR}"
+# }
 EOF
 
 systemctl restart nomad
