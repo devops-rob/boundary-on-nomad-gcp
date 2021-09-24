@@ -12,47 +12,47 @@ resource "google_service_account" "terraform-dev-role" {
   account_id   = "terraform-dev-role"
 }
 
-resource "google_storage_bucket_iam_member" "tfc_agent_boundary_controller" {
-  bucket = module.boundary_tls_cert.bucket_id
-  role   = "roles/storage.legacyObjectReader"
-  member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
-}
+// resource "google_storage_bucket_iam_member" "tfc_agent_boundary_controller" {
+//   bucket = module.boundary_tls_cert.bucket_id
+//   role   = "roles/storage.legacyObjectReader"
+//   member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
+// }
 
-resource "google_storage_bucket_iam_member" "tfc_agent_consul_server" {
-  bucket = module.consul_tls_cert.bucket_id
-  role   = "roles/storage.legacyObjectReader"
-  member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
-}
+// resource "google_storage_bucket_iam_member" "tfc_agent_consul_server" {
+//   bucket = module.consul_tls_cert.bucket_id
+//   role   = "roles/storage.legacyObjectReader"
+//   member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
+// }
 
-resource "google_storage_bucket_iam_member" "tfc_agent_nomad_server" {
-  bucket = module.nomad_tls_cert.bucket_id
-  role   = "roles/storage.legacyObjectReader"
-  member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
-}
+// resource "google_storage_bucket_iam_member" "tfc_agent_nomad_server" {
+//   bucket = module.nomad_tls_cert.bucket_id
+//   role   = "roles/storage.legacyObjectReader"
+//   member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
+// }
 
-resource "google_storage_bucket_iam_member" "tfc_agent_vault" {
-  bucket = module.vault.vault_storage_bucket
-  role   = "roles/storage.legacyObjectReader"
-  member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
-}
+// resource "google_storage_bucket_iam_member" "tfc_agent_vault" {
+//   bucket = module.vault.vault_storage_bucket
+//   role   = "roles/storage.legacyObjectReader"
+//   member = "serviceAccount:${google_service_account.terraform-dev-role.email}"
+// }
 
-resource "google_kms_crypto_key_iam_member" "tfc_agent_nomad" {
-  crypto_key_id = module.nomad_tls_cert.key_id
-  role          = "roles/cloudkms.cryptoKeyDecrypter"
-  member        = "serviceAccount:${google_service_account.terraform-dev-role.email}"
-}
+// resource "google_kms_crypto_key_iam_member" "tfc_agent_nomad" {
+//   crypto_key_id = module.nomad_tls_cert.key_id
+//   role          = "roles/cloudkms.cryptoKeyDecrypter"
+//   member        = "serviceAccount:${google_service_account.terraform-dev-role.email}"
+// }
 
-resource "google_kms_crypto_key_iam_member" "tfc_agent_consul" {
-  crypto_key_id = module.consul_tls_cert.key_id
-  role          = "roles/cloudkms.cryptoKeyDecrypter"
-  member        = "serviceAccount:${google_service_account.terraform-dev-role.email}"
-}
+// resource "google_kms_crypto_key_iam_member" "tfc_agent_consul" {
+//   crypto_key_id = module.consul_tls_cert.key_id
+//   role          = "roles/cloudkms.cryptoKeyDecrypter"
+//   member        = "serviceAccount:${google_service_account.terraform-dev-role.email}"
+// }
 
-resource "google_kms_crypto_key_iam_member" "tfc_agent_boundary" {
-  crypto_key_id = module.boundary_tls_cert.key_id
-  role          = "roles/cloudkms.cryptoKeyDecrypter"
-  member        = "serviceAccount:${google_service_account.terraform-dev-role.email}"
-}
+// resource "google_kms_crypto_key_iam_member" "tfc_agent_boundary" {
+//   crypto_key_id = module.boundary_tls_cert.key_id
+//   role          = "roles/cloudkms.cryptoKeyDecrypter"
+//   member        = "serviceAccount:${google_service_account.terraform-dev-role.email}"
+// }
 
 resource "google_kms_crypto_key_iam_member" "tfc_agent_vault" {
   crypto_key_id = data.google_kms_crypto_key.vault.id
@@ -125,28 +125,28 @@ EOT
     google-monitoring-enabled = "true"
   }
 
-  metadata_startup_script = templatefile("${path.module}/scripts/ca_cert.sh", {
-    consul_tls_bucket        = module.consul_tls_cert.bucket_id
-    consul_ca_cert_filename  = module.consul_tls_cert.ca_filename
-    consul_tls_cert_filename = module.consul_tls_cert.cert_filename
-    consul_tls_key_filename  = module.consul_tls_cert.key_filename
-    consul_kms_crypto_key    = module.consul_tls_cert.key_id
+  // metadata_startup_script = templatefile("${path.module}/scripts/ca_cert.sh", {
+  //   // consul_tls_bucket        = module.consul_tls_cert.bucket_id
+  //   // consul_ca_cert_filename  = module.consul_tls_cert.ca_filename
+  //   // consul_tls_cert_filename = module.consul_tls_cert.cert_filename
+  //   // consul_tls_key_filename  = module.consul_tls_cert.key_filename
+  //   // consul_kms_crypto_key    = module.consul_tls_cert.key_id
 
-    nomad_tls_bucket        = module.nomad_tls_cert.bucket_id
-    nomad_ca_cert_filename  = module.nomad_tls_cert.ca_filename
-    nomad_tls_cert_filename = module.nomad_tls_cert.cert_filename
-    nomad_tls_key_filename  = module.nomad_tls_cert.key_filename
-    nomad_kms_crypto_key    = module.nomad_tls_cert.key_id
+  //   // nomad_tls_bucket        = module.nomad_tls_cert.bucket_id
+  //   // nomad_ca_cert_filename  = module.nomad_tls_cert.ca_filename
+  //   // nomad_tls_cert_filename = module.nomad_tls_cert.cert_filename
+  //   // nomad_tls_key_filename  = module.nomad_tls_cert.key_filename
+  //   // nomad_kms_crypto_key    = module.nomad_tls_cert.key_id
 
-    vault_ca_cert_filename  = var.vault_ca_cert_filename
-    vault_tls_cert_filename = var.vault_tls_cert_filename
-    vault_tls_key_filename  = var.vault_tls_key_filename
-    vault_tls_bucket        = module.vault.vault_storage_bucket
-    vault_kms_crypto_key    = var.vault_kms_crypto_key
+  //   // vault_ca_cert_filename  = var.vault_ca_cert_filename
+  //   // vault_tls_cert_filename = var.vault_tls_cert_filename
+  //   // vault_tls_key_filename  = var.vault_tls_key_filename
+  //   // vault_tls_bucket        = module.vault.vault_storage_bucket
+  //   // vault_kms_crypto_key    = var.vault_kms_crypto_key
 
-    kms_project = var.project_id
+  //   // kms_project = var.project_id
 
-  })
+  // })
 
   network_interface {
     network = "default"
