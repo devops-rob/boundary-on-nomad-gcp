@@ -1,24 +1,24 @@
-resource "google_service_account" "consul_server" {
-  account_id   = "consul-server-id"
-  display_name = "Consul Server"
-}
+// resource "google_service_account" "consul_server" {
+//   account_id   = "consul-server-id"
+//   display_name = "Consul Server"
+// }
 
-module "consul_tls_cert" {
-  source  = "devops-rob/tls/gcp"
-  version = "0.1.4"
+// module "consul_tls_cert" {
+//   source  = "devops-rob/tls/gcp"
+//   version = "0.1.4"
 
-  project_id            = var.project_id
-  region                = var.project_region
-  service_account_email = google_service_account.consul_server.email
-  tls_bucket            = "consul-tls"
-  tls_cert_name         = "consul"
-}
+//   project_id            = var.project_id
+//   region                = var.project_region
+//   service_account_email = google_service_account.consul_server.email
+//   tls_bucket            = "consul-tls"
+//   tls_cert_name         = "consul"
+// }
 
-resource "google_storage_bucket_iam_member" "consul_server" {
-  bucket = module.vault.vault_storage_bucket
-  role   = "roles/storage.legacyObjectReader"
-  member = "serviceAccount:${google_service_account.consul_server.email}"
-}
+// resource "google_storage_bucket_iam_member" "consul_server" {
+//   bucket = module.vault.vault_storage_bucket
+//   role   = "roles/storage.legacyObjectReader"
+//   member = "serviceAccount:${google_service_account.consul_server.email}"
+// }
 
 
 resource "google_compute_region_instance_group_manager" "consul_server" {
@@ -73,12 +73,12 @@ resource "google_compute_instance_template" "consul_server" {
     CONSUL_SERVER_TAG                = var.consul_server_instance_tag
     CONSUL_MASTER_TOKEN              = var.consul_master_token
     CONSUL_TOKEN_NOMAD_SERVER        = random_uuid.consul_token.id
-    consul_tls_bucket                = module.consul_tls_cert.bucket_id
-    consul_ca_cert_filename          = module.consul_tls_cert.ca_filename
-    consul_tls_cert_filename         = module.consul_tls_cert.cert_filename
-    consul_tls_key_filename          = module.consul_tls_cert.key_filename
+    // consul_tls_bucket                = module.consul_tls_cert.bucket_id
+    // consul_ca_cert_filename          = module.consul_tls_cert.ca_filename
+    // consul_tls_cert_filename         = module.consul_tls_cert.cert_filename
+    // consul_tls_key_filename          = module.consul_tls_cert.key_filename
     kms_project                      = var.project_id
-    consul_kms_crypto_key            = module.consul_tls_cert.key_id
+    // consul_kms_crypto_key            = module.consul_tls_cert.key_id
     CONSUL_TOKEN_BOUNDARY_CONTROLLER = random_uuid.boundary_token.id
   })
 
@@ -94,7 +94,7 @@ resource "google_compute_instance_template" "consul_server" {
   }
 
   service_account {
-    email  = google_service_account.consul_server.email
+    // email  = google_service_account.consul_server.email
     scopes = ["userinfo-email", "compute-ro", "storage-ro", "cloud-platform"]
   }
 }

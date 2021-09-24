@@ -1,18 +1,18 @@
 #!/bin/bash
 
-mkdir -p /etc/consul.d/tls
-gsutil cp "gs://${consul_tls_bucket}/${consul_ca_cert_filename}" /etc/consul.d/tls/consul-ca.crt
-gsutil cp "gs://${consul_tls_bucket}/${consul_tls_cert_filename}" /etc/consul.d/tls/consul.crt
-gsutil cp "gs://${consul_tls_bucket}/${consul_tls_key_filename}" /etc/consul.d/tls/consul.key.enc
+# mkdir -p /etc/consul.d/tls
+# gsutil cp "gs://${consul_tls_bucket}/${consul_ca_cert_filename}" /etc/consul.d/tls/consul-ca.crt
+# gsutil cp "gs://${consul_tls_bucket}/${consul_tls_cert_filename}" /etc/consul.d/tls/consul.crt
+# gsutil cp "gs://${consul_tls_bucket}/${consul_tls_key_filename}" /etc/consul.d/tls/consul.key.enc
 
-base64 --decode < /etc/consul.d/tls/consul.key.enc | gcloud kms decrypt \
-  --project="${kms_project}" \
-  --key="${consul_kms_crypto_key}" \
-  --plaintext-file=/etc/consul.d/tls/consul.key \
-  --ciphertext-file=-
+# base64 --decode < /etc/consul.d/tls/consul.key.enc | gcloud kms decrypt \
+#   --project="${kms_project}" \
+#   --key="${consul_kms_crypto_key}" \
+#   --plaintext-file=/etc/consul.d/tls/consul.key \
+#   --ciphertext-file=-
 
-cp /etc/consul.d/tls/consul-ca.crt /usr/local/share/ca-certificates/
-update-ca-certificates
+# cp /etc/consul.d/tls/consul-ca.crt /usr/local/share/ca-certificates/
+# update-ca-certificates
 
 # Configure Consul.
 mkdir -p /etc/consul.d
@@ -70,9 +70,9 @@ systemctl restart consul
 
 # configure Consul for Nomad authentication
 
-export CONSUL_CACERT=/etc/consul.d/tls/consul-ca.crt
-export CONSUL_CLIENT_CERT=/etc/consul.d/tls/consul.crt
-export CONSUL_CLIENT_KEY=/etc/consul.d/tls/consul.key
+# export CONSUL_CACERT=/etc/consul.d/tls/consul-ca.crt
+# export CONSUL_CLIENT_CERT=/etc/consul.d/tls/consul.crt
+# export CONSUL_CLIENT_KEY=/etc/consul.d/tls/consul.key
 export CONSUL_HTTP_ADDR=https://127.0.0.1:8500
 export CONSUL_HTTP_TOKEN="${CONSUL_MASTER_TOKEN}"
 
