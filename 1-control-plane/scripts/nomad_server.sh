@@ -17,51 +17,6 @@ tar -C /opt/cni/bin -xzf /tmp/cni.tgz
 # Create Nomad directory.
 mkdir -p /etc/nomad.d
 
-# # Download Nomad TLS files from GCS
-# mkdir -p /etc/nomad.d/tls
-# gsutil cp "gs://${nomad_tls_bucket}/${nomad_ca_cert_filename}" /etc/nomad.d/tls/nomad-ca.crt
-# gsutil cp "gs://${nomad_tls_bucket}/${nomad_tls_cert_filename}" /etc/nomad.d/tls/nomad.crt
-# gsutil cp "gs://${nomad_tls_bucket}/${nomad_tls_key_filename}" /etc/nomad.d/tls/nomad.key.enc
-
-# base64 --decode < /etc/nomad.d/tls/nomad.key.enc | gcloud kms decrypt \
-#   --project="${kms_project}" \
-#   --key="${nomad_kms_crypto_key}" \
-#   --plaintext-file=/etc/vault.d/tls/nomad.key \
-#   --ciphertext-file=-
-
-# cp /etc/nomad.d/tls/nomad-ca.crt /usr/local/share/ca-certificates/
-
-# # Vault TLS certificates
-
-# mkdir -p /etc/nomad.d/tls
-# gsutil cp "gs://${vault_tls_bucket}/${vault_ca_cert_filename}" /etc/vault.d/tls/vault-ca.crt
-# gsutil cp "gs://${vault_tls_bucket}/${vault_tls_cert_filename}" /etc/vault.d/tls/vault.crt
-# gsutil cp "gs://${vault_tls_bucket}/${vault_tls_key_filename}" /etc/vault.d/tls/vault.key.enc
-
-# base64 --decode < /etc/vault.d/tls/vault.key.enc | gcloud kms decrypt \
-#   --project="${kms_project}" \
-#   --key="${vault_kms_crypto_key}" \
-#   --plaintext-file=/etc/vault.d/tls/vault.key \
-#   --ciphertext-file=-
-
-# cp /etc/vault.d/tls/vault-ca.crt /usr/local/share/ca-certificates/
-
-# # Consul TLS certificates
-
-# mkdir -p /etc/consul.d/tls
-# gsutil cp "gs://${consul_tls_bucket}/${consul_ca_cert_filename}" /etc/consul.d/tls/consul-ca.crt
-# gsutil cp "gs://${consul_tls_bucket}/${consul_tls_cert_filename}" /etc/consul.d/tls/consul.crt
-# gsutil cp "gs://${consul_tls_bucket}/${consul_tls_key_filename}" /etc/consul.d/tls/consul.key.enc
-
-# base64 --decode < /etc/consul.d/tls/consul.key.enc | gcloud kms decrypt \
-#   --project="${kms_project}" \
-#   --key="${consul_kms_crypto_key}" \
-#   --plaintext-file=/etc/consul.d/tls/consul.key \
-#   --ciphertext-file=-
-
-# cp /etc/consul.d/tls/consul-ca.crt /usr/local/share/ca-certificates/
-# update-ca-certificates
-
 
 # Nomad configuration files
 cat <<EOF > /etc/nomad.d/nomad.hcl

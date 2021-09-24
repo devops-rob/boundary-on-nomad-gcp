@@ -1,18 +1,6 @@
 #!/bin/bash
 
-# mkdir -p /etc/consul.d/tls
-# gsutil cp "gs://${consul_tls_bucket}/${consul_ca_cert_filename}" /etc/consul.d/tls/consul-ca.crt
-# gsutil cp "gs://${consul_tls_bucket}/${consul_tls_cert_filename}" /etc/consul.d/tls/consul.crt
-# gsutil cp "gs://${consul_tls_bucket}/${consul_tls_key_filename}" /etc/consul.d/tls/consul.key.enc
-
-# base64 --decode < /etc/consul.d/tls/consul.key.enc | gcloud kms decrypt \
-#   --project="${kms_project}" \
-#   --key="${consul_kms_crypto_key}" \
-#   --plaintext-file=/etc/consul.d/tls/consul.key \
-#   --ciphertext-file=-
-
-# cp /etc/consul.d/tls/consul-ca.crt /usr/local/share/ca-certificates/
-# update-ca-certificates
+mkdir -p /etc/consul.d
 
 # Configure Consul.
 mkdir -p /etc/consul.d

@@ -91,24 +91,11 @@ resource "google_compute_instance_template" "nomad_server" {
   metadata_startup_script = templatefile("${path.module}/scripts/nomad_server.sh", {
     CONSUL_SERVER_TAG        = var.consul_server_instance_tag
     CONSUL_TOKEN             = random_uuid.consul_token.id
-    // consul_tls_bucket        = module.consul_tls_cert.bucket_id
-    // consul_ca_cert_filename  = module.consul_tls_cert.ca_filename
-    // consul_tls_cert_filename = module.consul_tls_cert.cert_filename
-    // consul_tls_key_filename  = module.consul_tls_cert.key_filename
-    // consul_kms_crypto_key    = module.consul_tls_cert.key_id
 
     NOMAD_SERVER_COUNT      = var.nomad_server_instance_count
     NOMAD_SERVER_TAG        = var.nomad_server_instance_tag
-    // nomad_tls_bucket        = module.nomad_tls_cert.bucket_id
-    // nomad_ca_cert_filename  = module.nomad_tls_cert.ca_filename
-    // nomad_tls_cert_filename = module.nomad_tls_cert.cert_filename
-    // nomad_tls_key_filename  = module.nomad_tls_cert.key_filename
-    // nomad_kms_crypto_key    = module.nomad_tls_cert.key_id
 
     VAULT_ADDR              = module.vault.vault_addr
-    // vault_ca_cert_filename  = var.vault_ca_cert_filename
-    // vault_tls_cert_filename = var.vault_tls_cert_filename
-    // vault_tls_key_filename  = var.vault_tls_key_filename
     vault_tls_bucket        = module.vault.vault_storage_bucket
     vault_kms_crypto_key    = var.vault_kms_crypto_key
     VAULT_TOKEN             = random_uuid.vault_token.id

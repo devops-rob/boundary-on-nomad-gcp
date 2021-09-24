@@ -86,20 +86,7 @@ resource "google_compute_instance_template" "boundary_controller" {
     NOMAD_SERVER_TAG         = var.nomad_server_instance_tag
     CONSUL_SERVER_TAG        = var.consul_server_instance_tag
     CONSUL_TOKEN             = random_uuid.consul_token.id
-    // consul_tls_bucket        = module.consul_tls_cert.bucket_id
-    // consul_ca_cert_filename  = module.consul_tls_cert.ca_filename
-    // consul_tls_cert_filename = module.consul_tls_cert.cert_filename
-    // consul_tls_key_filename  = module.consul_tls_cert.key_filename
-    // consul_kms_crypto_key    = module.consul_tls_cert.key_id
-    // nomad_tls_bucket         = module.nomad_tls_cert.bucket_id
-    // nomad_ca_cert_filename   = module.nomad_tls_cert.ca_filename
-    // nomad_tls_cert_filename  = module.nomad_tls_cert.cert_filename
-    // nomad_tls_key_filename   = module.nomad_tls_cert.key_filename
-    // nomad_kms_crypto_key     = module.nomad_tls_cert.key_id
     VAULT_ADDR               = module.vault.vault_addr
-    // vault_ca_cert_filename   = var.vault_ca_cert_filename
-    // vault_tls_cert_filename  = var.vault_tls_cert_filename
-    // vault_tls_key_filename   = var.vault_tls_key_filename
     vault_tls_bucket         = module.vault.vault_storage_bucket
     vault_kms_crypto_key     = var.vault_kms_crypto_key
     kms_project              = var.project_id
@@ -118,7 +105,7 @@ resource "google_compute_instance_template" "boundary_controller" {
   }
 
   service_account {
-    // email  = google_service_account.boundary_controller.email
+    #  email  = google_service_account.boundary_controller.email
     scopes = ["userinfo-email", "compute-ro", "storage-ro", "cloud-platform"]
   }
 }
