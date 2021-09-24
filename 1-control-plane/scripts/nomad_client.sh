@@ -86,7 +86,7 @@ consul {
 #   key_file    = "/etc/vault.d/tls/nomad.key"
 
 #   address     = "${VAULT_ADDR}"
-# }
+}
 EOF
 
 systemctl restart nomad

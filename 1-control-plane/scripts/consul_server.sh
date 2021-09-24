@@ -61,7 +61,7 @@ systemctl restart consul
 # export CONSUL_CACERT=/etc/consul.d/tls/consul-ca.crt
 # export CONSUL_CLIENT_CERT=/etc/consul.d/tls/consul.crt
 # export CONSUL_CLIENT_KEY=/etc/consul.d/tls/consul.key
-export CONSUL_HTTP_ADDR=https://127.0.0.1:8500
+export CONSUL_HTTP_ADDR=http://127.0.0.1:8500
 export CONSUL_HTTP_TOKEN="${CONSUL_MASTER_TOKEN}"
 
 consul acl auth-method create \
