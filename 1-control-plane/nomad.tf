@@ -128,3 +128,12 @@ resource "google_compute_target_pool" "nomad_server" {
     google_compute_http_health_check.nomad.name,
   ]
 }
+
+resource "consul_acl_token" "nomad_server" {
+  policies = ["nomad-server"]
+  local    = true
+}
+
+data "consul_acl_token_secret_id" "nomad_server" {
+  accessor_id = consul_acl_token.nomad_server.id
+}
