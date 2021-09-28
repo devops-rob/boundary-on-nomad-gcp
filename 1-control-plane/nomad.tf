@@ -157,7 +157,3 @@ resource "consul_acl_token" "nomad_server" {
   policies = [consul_acl_policy.nomad_server.name]
   local    = true
 }
-
-data "consul_acl_token_secret_id" "nomad_server" {
-  accessor_id = consul_acl_token.nomad_server.id
-}
