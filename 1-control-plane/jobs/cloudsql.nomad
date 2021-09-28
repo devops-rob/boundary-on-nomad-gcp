@@ -36,9 +36,9 @@ job "cloudsql" {
       name = "cloudsql"
       port = "5432"
 
-      connect {
-        sidecar_service {}
-      }
+      // connect {
+      //   sidecar_service {}
+      // }
     }
 
     task "proxy" {
