@@ -3,8 +3,8 @@ job "boundary" {
   
   group "controller" {
     constraint {
-      attribute = "${node.unique.name}"
-      value = "nomad-client-2p1f"
+      operator  = "distinct_hosts"
+      value     = "true"
     }
 
     network {
@@ -48,7 +48,7 @@ job "boundary" {
       driver = "docker"
 
       config {
-        image   = "hashicorp/boundary:0.3.0"
+        image   = "hashicorp/boundary:0.6.1"
         command = "boundary"
         args = [
             "database",
@@ -71,7 +71,7 @@ job "boundary" {
         BOUNDARY_ADDR = "http://localhost:9200"
       }
 
-            template {
+      template {
         destination = "local/config.hcl"
         data = <<EOF
 disable_mlock = true
@@ -138,7 +138,7 @@ EOF
 
       config {
         privileged = true
-        image   = "hashicorp/boundary:0.3.0"
+        image   = "hashicorp/boundary:0.6.1"
         args    = [
           "server",
           "-config=local/config.hcl"

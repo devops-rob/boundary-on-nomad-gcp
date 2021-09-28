@@ -27,8 +27,9 @@ job "cloudsql" {
 
     count = 3
 
-    spread {
-      attribute = "${node.datacenter}"
+    constraint {
+      operator  = "distinct_hosts"
+      value     = "true"
     }
 
     service {
