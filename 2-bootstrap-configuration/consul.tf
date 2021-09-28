@@ -58,3 +58,33 @@ resource "consul_acl_binding_rule" "node_binding" {
   bind_type   = "role"
   bind_name   = "node"
 }
+
+
+resource "consul_acl_policy" "nomad_server" {
+  name  = "nomad-server"
+  rules = <<-RULE
+      agent_prefix "" {
+        policy = "read"
+      }
+
+      node_prefix "" {
+        policy = "read"
+      }
+
+      service_prefix "" {
+        policy = "write"
+      }
+
+      acl = "write"
+      operator = "write"
+    RULE
+}
+
+resource "consul_acl_token" "nomad_server" {
+  policies = [consul_acl_policy.nomad_server.name]
+  local    = true
+}
+
+data "consul_acl_token_secret_id" "nomad_server" {
+  accessor_id = consul_acl_token.nomad_server.id
+}

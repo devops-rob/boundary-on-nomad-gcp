@@ -32,16 +32,16 @@ job "boundary" {
       name = "boundary"
       port = "9002"
 
-      connect {
-        sidecar_service {
-          proxy {
-            upstreams {
-                destination_name = "cloudsql"
-                local_bind_port = 5432
-            }
-          }
-        }
-      }
+      // connect {
+      //   sidecar_service {
+      //     proxy {
+      //       upstreams {
+      //           destination_name = "cloudsql"
+      //           local_bind_port = 5432
+      //       }
+      //     }
+      //   }
+      // }
     }
 
     task "init" {
@@ -138,6 +138,7 @@ EOF
 
       config {
         privileged = true
+        cap_add = ["IPC_LOCK"]
         image   = "hashicorp/boundary:0.6.1"
         args    = [
           "server",
@@ -152,10 +153,10 @@ EOF
 
       env {
         BOUNDARY_ADDR = "http://localhost:9200"
+        SKIP_SETCAP = true
       }
 
       template {
-        destination = "local/config.hcl"
         destination = "local/config.hcl"
         data = <<EOF
 disable_mlock = true
