@@ -130,7 +130,7 @@ resource "google_compute_target_pool" "nomad_server" {
 }
 
 resource "consul_acl_token" "nomad_server" {
-  policies = [consul_acl_policy.nomad_server.name]
+  # policies = [consul_acl_policy.nomad_server.name]
   local    = true
 }
 
