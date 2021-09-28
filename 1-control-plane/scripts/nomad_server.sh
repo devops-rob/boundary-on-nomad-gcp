@@ -83,9 +83,9 @@ consul {
 EOF
 
  cat <<EOF > /etc/nomad.d/acl.hcl
-#  acl = {
-#    enabled = true
-#  }
+ acl = {
+   enabled = true
+ }
 EOF
 
 systemctl restart nomad
