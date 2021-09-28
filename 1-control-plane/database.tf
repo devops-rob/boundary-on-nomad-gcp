@@ -46,47 +46,47 @@ resource "google_project_iam_member" "cloudsql_proxy" {
   member = "serviceAccount:${google_service_account.cloudsql_proxy.email}"
 }
 
-# resource "nomad_job" "cloudsql" {
-#   hcl2 {
-#     enabled = true
-#     vars = {
-#       "cloudsql_path"        = "/alloc/data/cloudsql",
-#       "cloudsql_host"        = "${var.project_id}:${var.project_region}:${google_sql_database_instance.database.name}",
-#       "cloudsql_credentials" = base64decode(google_service_account_key.cloudsql_proxy.private_key)
-#     }
-#   }
+resource "nomad_job" "cloudsql" {
+  hcl2 {
+    enabled = true
+    vars = {
+      "cloudsql_path"        = "/alloc/data/cloudsql",
+      "cloudsql_host"        = "${var.project_id}:${var.project_region}:${google_sql_database_instance.database.name}",
+      "cloudsql_credentials" = base64decode(google_service_account_key.cloudsql_proxy.private_key)
+    }
+  }
 
-#   jobspec = file("${path.module}/jobs/cloudsql.nomad")
+  jobspec = file("${path.module}/jobs/cloudsql.nomad")
 
-#   depends_on = [
-#     null_resource.nomad_race_condition
-#   ]
-# }
+  depends_on = [
+    null_resource.nomad_race_condition
+  ]
+}
 
-# resource "null_resource" "nomad_race_condition" {
+resource "null_resource" "nomad_race_condition" {
 
-#   provisioner "local-exec" {
+  provisioner "local-exec" {
 
-#     command = "sleep 180"
+    command = "sleep 180"
 
-#   }
+  }
 
-#   depends_on = [
-#     # consul_acl_policy.nomad_server,
-#     # consul_acl_token.nomad_server,
-#     google_compute_firewall.nomad_allow_whitelist,
-#     google_compute_forwarding_rule.nomad_server_internal,
-#     google_compute_health_check.nomad,
-#     google_compute_http_health_check.nomad,
-#     google_compute_instance_template.boundary_controller,
-#     google_compute_instance_template.nomad_server,
-#     google_compute_region_backend_service.nomad_server,
-#     google_compute_region_instance_group_manager.boundary_controller,
-#     google_compute_region_instance_group_manager.nomad_server,
-#     google_compute_target_pool.nomad_server,
-#     google_compute_target_pool.boundary_controller
-#   ]
-# }
+  depends_on = [
+    # consul_acl_policy.nomad_server,
+    # consul_acl_token.nomad_server,
+    google_compute_firewall.nomad_allow_whitelist,
+    google_compute_forwarding_rule.nomad_server_internal,
+    google_compute_health_check.nomad,
+    google_compute_http_health_check.nomad,
+    google_compute_instance_template.boundary_controller,
+    google_compute_instance_template.nomad_server,
+    google_compute_region_backend_service.nomad_server,
+    google_compute_region_instance_group_manager.boundary_controller,
+    google_compute_region_instance_group_manager.nomad_server,
+    google_compute_target_pool.nomad_server,
+    google_compute_target_pool.boundary_controller
+  ]
+}
 
 output "database_user" {
   value     = google_sql_user.boundary.name
@@ -113,5 +113,5 @@ output "nomad_external_ip" {
 }
 
 output "consul_external_ip" {
-    value = google_compute_instance_template.consul_server.network_interface.0.access_config.0.nat_ip  
+    value = google_compute_instance_template.nomad_server.network_interface.0.access_config.0.nat_ip  
 }
