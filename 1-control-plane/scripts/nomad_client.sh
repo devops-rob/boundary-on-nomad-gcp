@@ -38,6 +38,10 @@ plugin "docker" {
   }
 }
 
+acl = {
+  enabled = true
+}
+
 # tls {
 #   http = true
 #   rpc  = true
