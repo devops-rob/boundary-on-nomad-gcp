@@ -35,3 +35,7 @@ variable "database_names" {
 variable "consul_master_token" {
   type = string
 }
+
+variable "nomad_token" {
+    type = string
+}

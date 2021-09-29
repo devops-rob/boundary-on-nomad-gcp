@@ -26,7 +26,7 @@ data "google_compute_forwarding_rule" "consul" {
 
 provider "nomad" {
   address      = "http://${data.google_compute_forwarding_rule.nomad.ip_address}:4646"
-  secret_id    = data.consul_acl_token_secret_id.nomad_server.secret_id
+  secret_id    = var.nomad_token
   consul_token = var.consul_master_token
 }
 
